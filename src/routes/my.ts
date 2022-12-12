@@ -4,7 +4,7 @@ const router = Router()
 
 router.get('/', (_req: Request, res: Response): string => {
   res.send('Express + TypeScript Server !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-  return 3
+  return 6
 })
 
 export default router
