@@ -44,7 +44,7 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "eslint --ignore-path .eslintignore --fix --max-warnings=0 --ext .js,.ts .",
+      "eslint $(git diff --diff-filter=AMR --name-only --merge-base main | grep -e '.js$' -e '.ts'$ -e '.json$')",
       "prettier --write ."
     ]
   },
