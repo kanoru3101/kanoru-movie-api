@@ -1,5 +1,3 @@
-import ormConfig from './typeormconfig';
+import ormConfig from './typeormconfig'
 
-export {
-    ormConfig
-}
+export { ormConfig }

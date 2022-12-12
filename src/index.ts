@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import { myMiddleware } from './middlewares'
 import routers from './routes'
 import bodyParser from 'body-parser'
-import connectDB from "./config/typeormconfig";
+import connectDB from './config/typeormconfig'
 
 dotenv.config()
 
