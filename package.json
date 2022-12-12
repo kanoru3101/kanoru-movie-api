@@ -43,10 +43,7 @@
     "typescript": "^4.9.4"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "eslint $(git diff --diff-filter=AMR --name-only --merge-base main | grep -e '.js$' -e '.ts'$ -e '.json$')",
-      "prettier --write ."
-    ]
+    "**/*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "husky": {
     "hooks": {
