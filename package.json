@@ -43,7 +43,7 @@
     "typescript": "^4.9.4"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": "eslint --fix $(git diff --cache-file HEAD | xargs)"
+    "**/*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "husky": {
     "hooks": {
