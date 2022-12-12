@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  api:
+    container_name: api
+    # restart: always
+    build: .
+    command: dev
+    env_file:
+      - .env
+    ports:
+      - '${API_PORT}:${API_PORT}'
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app/
+      - /app/node_modules
+  postgres:
+    container_name: postgres
+    image: 'postgres'
+    ports:
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+volumes:
+  database-data: {}      
