@@ -51,11 +51,6 @@
       "eslint --quiet --fix"
     ]
   },
-  "lint-staged-push": {
-    "**/*.{ts,tsx}": [
-      "bash -c tsc --noEmit"
-    ]
-  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
