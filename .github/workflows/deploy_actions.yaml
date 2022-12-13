@@ -16,5 +16,4 @@ jobs:
       - name: install dependencies    
       - run: npm ci
       - run: npm run build --if-present
-      - run:
       - run: npm tsc:check
