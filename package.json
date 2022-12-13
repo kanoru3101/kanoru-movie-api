@@ -12,7 +12,7 @@
     "execute-husky": "npx husky install && npx husky add .husky/pre-commit .husky/pre-push \"npx --no-install lint-staged\"",
     "tsc:check": "bash -c tsc --noEmit",
     "lint:diff": "eslint $(git diff --diff-filter=AMR --name-only --merge-base main | grep -e '.js$' -e '.ts'$ -e '.json$')",
-    "pre-push": "lint:diff & tsc:check"
+    "pre-push": "npm run lint:diff & npm run tsc:check"
   },
   "keywords": [],
   "author": "",
