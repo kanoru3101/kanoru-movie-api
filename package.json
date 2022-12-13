@@ -49,11 +49,16 @@
       "npm run format"
     ]
   },
+  "lint-staged-push": {
+    "**/*.{ts,tsx}": [
+      "bash -c tsc --noEmit"
+    ]
+  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged",
-      "pre-push": "tsc:my"
+      "pre-push": "lint-staged-push"
     }
   }
 }
