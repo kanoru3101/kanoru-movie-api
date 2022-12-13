@@ -9,7 +9,8 @@
     "dev": "tsc -w & nodemon .",
     "lint": "eslint --ignore-path .eslintignore --fix --max-warnings=0 --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
-    "execute-husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\""
+    "execute-husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\"",
+    "tsc:my": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -43,10 +44,14 @@
     "typescript": "^4.9.4"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": "eslint --fix"
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --quiet --fix",
+      "bash -c tsc --noEmit"
+    ]
   },
   "husky": {
     "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged"
     }
   }
