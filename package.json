@@ -46,14 +46,14 @@
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
       "eslint --quiet --fix",
-      "bash -c tsc --noEmit"
+      "npm run format"
     ]
   },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged",
-      "pre-push": "lint-staged"
+      "pre-push": "bash -c tsc --noEmit"
     }
   }
 }
