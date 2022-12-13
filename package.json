@@ -10,8 +10,9 @@
     "lint": "eslint --ignore-path .eslintignore --fix --max-warnings=0 --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "execute-husky": "npx husky install && npx husky add .husky/pre-commit .husky/pre-push \"npx --no-install lint-staged\"",
-    "tsc:my": "bash -c tsc --noEmit",
-    "pre-push": "eslint $(git diff --diff-filter=AMR --name-only --merge-base main | grep -e '.js$' -e '.ts'$ -e '.json$') & bash -c tsc --noEmit"
+    "tsc:check": "bash -c tsc --noEmit",
+    "lint:diff": "eslint $(git diff --diff-filter=AMR --name-only --merge-base main | grep -e '.js$' -e '.ts'$ -e '.json$')",
+    "pre-push": "lint:diff & tsc:check"
   },
   "keywords": [],
   "author": "",
@@ -46,8 +47,8 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "eslint --quiet --fix",
-      "npm run format"
+      "npm run format",
+      "eslint --quiet --fix"
     ]
   },
   "lint-staged-push": {
@@ -58,8 +59,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged",
-      "pre-push": "lint-staged-push"
+      "pre-commit": "lint-staged"
     }
   }
 }
