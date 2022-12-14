@@ -80,6 +80,8 @@ jobs:
             echo ${{ steps.docker_build.outputs.digest }}
    deploy-heroku:
     runs-on: ubuntu-latest
+    needs: [build_test]
+
     steps:
       - uses: actions/checkout@v2
       - uses: gonuit/heroku-docker-deploy@v1.3.3
@@ -93,6 +95,3 @@ jobs:
           dockerfile_name: Dockerfile.prod
           docker_options: "--no-cache"
           process_type: web
-          healthcheck: " https://sandbox-express.herokuapp.com/health"
-          checkstring: "ok"
-          rollbackonhealthcheckfailed: true
