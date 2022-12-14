@@ -78,19 +78,16 @@ jobs:
             echo "runing the docker image"
             echo "Testing the nodejs  app endpoints"
             echo ${{ steps.docker_build.outputs.digest }}
-
-  # build:
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Use Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: '16.13.0'
-  #     - name: install dependencies    
-  #     - run: npm ci
-  #     - run: npm run build --if-present
-  #     - run: npm tsc:check
-  #     - run: npm test
+   deploy-heroku:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "sandbox-express"
+          heroku_email: "kanoru3101@gmail.com"
+          usedocker: true
+          healthcheck: " https://sandbox-express.herokuapp.com/health"
+          checkstring: "ok"
+          rollbackonhealthcheckfailed: true

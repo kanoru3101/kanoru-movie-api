@@ -17,13 +17,15 @@ const connectDB = new DataSource({
   synchronize: true,
 })
 
-// connectDB
-//     .initialize()
-//     .then(() => {
-//         console.log(`Data Source has been initialized`);
-//     })
-//     .catch((err) => {
-//         console.error(`Data Source initialization error`, err);
-//     })
+connectDB
+  .initialize()
+  .then(() => {
+    // eslint-disable-next-line no-console
+    console.log(`Data Source has been initialized`)
+  })
+  .catch(err => {
+    // eslint-disable-next-line no-console
+    console.error(`Data Source initialization error`, err)
+  })
 
 export default connectDB

@@ -9,6 +9,7 @@
     "dev": "tsc -w & nodemon .",
     "test": "mocha -r ts-node/register 'test/**/*.ts'",
     "lint": "eslint --ignore-path .eslintignore --fix --max-warnings=0 --ext .js,.ts .",
+    "lint:format": "eslint --quiet --fix",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "execute-husky": "npx husky install && npx husky add .husky/pre-commit .husky/pre-push \"npx --no-install lint-staged\"",
     "tsc:check": "bash -c tsc --noEmit",
