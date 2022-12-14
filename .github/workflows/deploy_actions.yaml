@@ -82,12 +82,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - uses: gonuit/heroku-docker-deploy@v1.3.3
         with:
+          email: "kanoru3101@gmail.com"
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "sandbox-express"
           heroku_email: "kanoru3101@gmail.com"
           usedocker: true
+          dockerfile_directory: ./
+          dockerfile_name: Dockerfile
+          docker_options: "--no-cache"
+          process_type: web
           healthcheck: " https://sandbox-express.herokuapp.com/health"
           checkstring: "ok"
           rollbackonhealthcheckfailed: true
