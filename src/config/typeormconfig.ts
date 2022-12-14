@@ -25,6 +25,14 @@ connectDB
   })
   .catch(err => {
     // eslint-disable-next-line no-console
+    console.log({
+      host: process.env.POSTGRES_HOST || 'localhost',
+      port,
+      username: process.env.POSTGRES_USER || 'postgres',
+      password: process.env.POSTGRES_PASSWORD || 'postgres',
+      database: process.env.POSTGRES_DB || 'postgres',
+    })
+    // eslint-disable-next-line no-console
     console.error(`Data Source initialization error`, err)
   })
 
