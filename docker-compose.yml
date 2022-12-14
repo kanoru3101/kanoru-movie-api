@@ -4,7 +4,10 @@ services:
   api:
     container_name: api
     # restart: always
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+      
     command: dev
     env_file:
       - .env

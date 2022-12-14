@@ -89,12 +89,12 @@ jobs:
       - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
         uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
         with:
+          email: "kanoru3101@gmail.com"
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "sandbox-express"
-          heroku_email: "kanoru3101@gmail.com"
           usedocker: true
           dockerfile_directory: ./
-          dockerfile_name: Dockerfile.prod
+          dockerfile_name: Dockerfile
           docker_options: "--no-cache"
           process_type: web
    deploy-heroku-v2:
