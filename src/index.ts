@@ -9,8 +9,8 @@ dotenv.config()
 
 connectDB
 
-const PORT = (process.env.API_PORT || 8080) as number
-const HOST = process.env.API_HOST || 'localhost'
+const PORT = (process.env.PORT || 8080) as number
+const HOST = process.env.HOST || '0.0.0.0'
 const app: Express = express()
 
 app.use(bodyParser.json({ limit: '50mb', type: 'application/json' }))
