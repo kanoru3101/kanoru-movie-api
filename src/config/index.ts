@@ -1,3 +1,3 @@
-import ormConfig from './typeormconfig'
+import ormConfig from './ormconfig'
 
 export { ormConfig }

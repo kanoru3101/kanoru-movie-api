@@ -1,10 +1,10 @@
 {
-   "compilerOptions": {
-      "target": "es6",
+  "compilerOptions": {
+    "target": "es6",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "commonjs", 
-    "outDir": "./dist", 
+    "module": "commonjs",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": false,
@@ -12,7 +12,7 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "moduleResolution": "node"
-   },
-   "include": ["src"],
-   "exclude": ["node_modules"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
