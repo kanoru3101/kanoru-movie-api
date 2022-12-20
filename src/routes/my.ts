@@ -3,7 +3,12 @@ import { Router, Request, Response } from 'express'
 const router = Router()
 
 router.get('/', (_req: Request, res: Response) => {
-  res.send('Express + TypeScript Server !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+  // logger.log("debug", "Hello, Winston!");
+  res
+    .status(200)
+    .json({
+      data: 'Express + TypeScript Server !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
+    })
 })
 
 export default router

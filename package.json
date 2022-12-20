@@ -14,17 +14,24 @@
     "execute-husky": "npx husky install && npx husky add .husky/pre-commit .husky/pre-push \"npx --no-install lint-staged\"",
     "tsc:check": "bash -c tsc --noEmit",
     "lint:diff": "eslint $(git diff --diff-filter=AMR --name-only --merge-base main | grep -e '.js$' -e '.ts'$ -e '.json$')",
-    "pre-push": "npm run lint:diff & npm run tsc:check && npm run test"
+    "pre-push": "npm run lint:diff & npm run tsc:check && npm run test",
+    "migration:create": "cross-env typeorm migration:create ./src/migrations/$npm_config_name",
+    "migration:run": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run -d src/config/ormconfig.ts",
+    "migration:revert": "typeorm migration:revert"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/morgan": "^1.9.3",
     "body-parser": "^1.20.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "morgan": "^1.10.0",
     "pg": "^8.8.0",
-    "typeorm": "^0.3.11"
+    "typeorm": "^0.3.11",
+    "uuid": "^9.0.0",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
@@ -37,6 +44,7 @@
     "@typescript-eslint/parser": "^5.46.0",
     "chai": "^4.3.7",
     "concurrently": "^7.6.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard-with-typescript": "^23.0.0",

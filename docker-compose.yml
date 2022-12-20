@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   api:
@@ -17,12 +17,12 @@ services:
       - postgres
     volumes:
       - .:/app/
-      - /app/node_modules
   postgres:
     container_name: postgres
     image: 'postgres'
     ports:
-      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+      - '5432:5432'
+
     env_file:
       - .env
     environment:
@@ -32,4 +32,4 @@ services:
     volumes:
       - database-data:/var/lib/postgresql/data/
 volumes:
-  database-data: {}
+  database-data:
