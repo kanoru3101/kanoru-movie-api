@@ -1,0 +1,4 @@
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Wed, 21 Dec 2022 09:42:09 GMT[39m
+[35m[39m. {"timestamp":"2022-12-21 09:42:09:429"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Wed, 21 Dec 2022 09:42:31 GMT[39m
+[35m[39m. {"timestamp":"2022-12-21 09:42:31:4231"}
