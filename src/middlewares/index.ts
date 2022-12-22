@@ -1,5 +1,6 @@
 import type { RequestHandler } from 'express'
 import morganMiddleware from './morganMiddleware'
+import errorHandler from './errorHandler'
 
 const myMiddleware: RequestHandler = (req, _res, next) => {
   // eslint-disable-next-line no-console
@@ -7,4 +8,4 @@ const myMiddleware: RequestHandler = (req, _res, next) => {
   next()
 }
 
-export { myMiddleware, morganMiddleware }
+export { myMiddleware, morganMiddleware, errorHandler }
