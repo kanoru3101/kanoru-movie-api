@@ -1,6 +1,6 @@
 import express, { Express } from 'express'
 import dotenv from 'dotenv'
-import { myMiddleware, morganMiddleware } from './middlewares'
+import { myMiddleware, morganMiddleware, errorHandler } from './middlewares'
 import routers from './routes'
 import bodyParser from 'body-parser'
 import connectDB from './config/ormconfig'
@@ -36,6 +36,8 @@ app.use(myMiddleware)
 app.use(morganMiddleware)
 
 app.use(routers)
+
+app.use(errorHandler)
 
 app.listen(PORT, HOST, () => {
   // eslint-disable-next-line no-console
