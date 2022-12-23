@@ -1,35 +1,41 @@
 version: '3.8'
 
 services:
-  api:
-    container_name: api
-    # restart: always
-    build: 
-      context: .
-      dockerfile: Dockerfile.dev
+  # api:
+  #   container_name: api
+  #   # restart: always
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile.dev
       
-    command: dev
-    env_file:
-      - .env
-    ports:
-      - '${API_PORT}:${API_PORT}'
-    depends_on:
-      - postgres
-    volumes:
-      - .:/app/
+  #   command: dev
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - '${API_PORT}:${API_PORT}'
+  #   depends_on:
+  #     - postgres
+  #   volumes:
+  #     - .:/app
+
+
   postgres:
     container_name: postgres
     image: 'postgres'
     ports:
       - '5432:5432'
-
+    restart: on-failure  
     env_file:
       - .env
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - kanoru-movie-network
     volumes:
       - database-data:/var/lib/postgresql/data/
 volumes:
   database-data:
+networks:
+  kanoru-movie-network:

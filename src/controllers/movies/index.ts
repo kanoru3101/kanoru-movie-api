@@ -1,5 +1,6 @@
 import { GetMovieById, GetMovieByIdResponse } from './types'
-import * as themovieService from '../../services/themovie/index'
+//import * as themovieService from '@services/themovie'
+import * as themovieService from '../../services/themovie'
 
 export const getMovieById = async ({
   movieId,

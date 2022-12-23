@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import * as movieController from '@controllers/movies'
+import * as movieController from '../../controllers/movies'
 import { GetMovie } from './types'
-import { RequestHandler } from '@utils/requestHandler'
+import { RequestHandler } from '../../utils/requestHandler'
 
 const router = Router()
 

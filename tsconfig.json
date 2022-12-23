@@ -12,17 +12,16 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
     "baseUrl": "src",
     "paths": {
-      "@routes/*": ["routes/*"],
-      "@services/*": ["services/*"],
-      "@models/*": ["models/*"],
-      "@middleware/*": ["middleware/*"],
-      "@controllers": ["controllers"],
-      "@controllers/*": ["controllers/*"],
-      "@config/*": ["config/*"],
-      "@utils/*": ["utils/*"]
+      "@services/*": ["services/*"]
     }
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
   },
   "include": ["src"],
   "exclude": ["node_modules"]

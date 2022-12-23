@@ -1,0 +1,36 @@
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 304, DATE: Thu, 22 Dec 2022 16:29:49 GMT[39m
+[35m[39m. {"timestamp":"2022-12-22 18:29:49:2949"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 304, DATE: Thu, 22 Dec 2022 19:08:45 GMT[39m
+[35m[39m. {"timestamp":"2022-12-22 21:08:45:845"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /movies/76341, STATUS: 200, DATE: Fri, 23 Dec 2022 08:38:27 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 10:38:27:3827"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 304, DATE: Fri, 23 Dec 2022 09:04:54 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:04:54:454"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 304, DATE: Fri, 23 Dec 2022 09:05:48 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:05:48:548"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Fri, 23 Dec 2022 09:06:42 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:06:42:642"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Fri, 23 Dec 2022 09:19:43 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:19:43:1943"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Fri, 23 Dec 2022 09:28:56 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:28:56:2856"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Fri, 23 Dec 2022 09:29:44 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:29:44:2944"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Fri, 23 Dec 2022 09:30:01 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:30:01:301"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Fri, 23 Dec 2022 09:48:14 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:48:14:4814"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 304, DATE: Fri, 23 Dec 2022 09:51:54 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:51:54:5154"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Fri, 23 Dec 2022 09:55:27 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:55:27:5527"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /favicon.ico, STATUS: 404, DATE: Fri, 23 Dec 2022 09:55:27 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:55:27:5527"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 304, DATE: Fri, 23 Dec 2022 09:55:34 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:55:34:5534"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Fri, 23 Dec 2022 09:55:50 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:55:50:5550"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 304, DATE: Fri, 23 Dec 2022 09:56:30 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:56:30:5630"}
+[undefined] [35mhttp[39m: [35mMethod: GET, URL: /, STATUS: 200, DATE: Fri, 23 Dec 2022 09:56:38 GMT[39m
+[35m[39m. {"timestamp":"2022-12-23 11:56:38:5638"}

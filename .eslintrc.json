@@ -4,6 +4,15 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts"]
+    },
+    // This part is required to work with eslint, the rest is already setup to use import
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   "plugins": ["@typescript-eslint"],
   "extends": [
     "eslint:recommended",
