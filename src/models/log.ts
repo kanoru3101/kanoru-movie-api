@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
 
 @Entity({
-  name: 'logs',
+  name: 'log',
 })
 class Logs extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   public id!: string
 
   @Column({ type: 'jsonb', nullable: false })

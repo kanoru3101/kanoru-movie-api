@@ -1,0 +1,23 @@
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
+
+@Entity({
+  name: 'user',
+})
+class User extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: string
+
+  @Column({ type: 'varchar' })
+  name: string
+
+  @Column({ nullable: false, type: 'varchar', unique: true})
+  email: string
+
+  @Column({ type: 'varchar'})
+  password: string
+
+  @Column({ nullable: false, type: 'varchar', unique: true})
+  slug: string
+}
+
+export default User

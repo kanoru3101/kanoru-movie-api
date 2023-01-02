@@ -4,6 +4,14 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts"]
+    },
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   "plugins": ["@typescript-eslint"],
   "extends": [
     "eslint:recommended",
