@@ -1,4 +1,4 @@
-import { Movie } from '../../services/themovie/types'
+import { Movie } from '@services/themovie/types'
 
 export type GetMovieById = {
   movieId: number

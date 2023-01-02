@@ -1,3 +1,4 @@
-import User from './logs'
+import User from './user'
+import Log from './log';
 
-export { User }
+export { User, Log }

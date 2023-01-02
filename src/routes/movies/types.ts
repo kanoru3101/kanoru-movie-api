@@ -1,4 +1,4 @@
-import { GetMovieByIdResponse } from '../../controllers/movies/types'
+import { GetMovieByIdResponse } from '@controllers/movies/types'
 
 export type GetMovie = {
   query: void

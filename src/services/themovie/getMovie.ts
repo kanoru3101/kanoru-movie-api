@@ -1,5 +1,5 @@
-import themovieDB from '../../config/themovieDB'
-import ApiError from '../../errors'
+import themovieDB from '@config/themovieDB'
+import ApiError from '@errors'
 import { Movie } from './types'
 
 export type GetMovie = {

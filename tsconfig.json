@@ -14,10 +14,19 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+    "strictPropertyInitialization": false,
     "sourceMap": true,
     "baseUrl": "src",
     "paths": {
-      "@services/*": ["services/*"]
+      "@services/*": ["services/*"],
+      "@errors": ["errors"],
+      "@errors/*": ["errors/*"],
+      "@config": ["config"],
+      "@config/*": ["config/*"],
+      "@controllers/*": ["controllers/*"],
+      "@utils": ["utils"],
+      "@utils/*": ["utils/*"],
+      "@models": ["models"],
     }
   },
   "ts-node": {

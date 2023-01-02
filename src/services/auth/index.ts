@@ -7,10 +7,10 @@ dotenv.config()
 const JWT_SIGNING_SECRET = process.env.JWT_SIGNING_SECRET as string;
 const PASSWORD_SALT = process.env.PASSWORD_SALT as string;
 
-export const generateJWT = ({ user }: { user: {id: string, email: string }}): string => {
+export const generateJWT = ({ id, email }: {id: string, email: string }): string => {
   const payload = {
-    id: user.id,
-    email: user.email,
+    id,
+    email,
   }
 
   return jsonwebtoken.sign(payload, JWT_SIGNING_SECRET, { expiresIn: '30 days', })

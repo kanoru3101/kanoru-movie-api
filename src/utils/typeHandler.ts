@@ -9,9 +9,11 @@ type TypeRequest = {
 
 type Handler<Params, Res, Body, ReqQuery> = Request<Params, Res, Body, ReqQuery>
 
-export type RequestHandler<T extends TypeRequest> = Handler<
+type TypeHandler<T extends TypeRequest> = Handler<
   T['params'],
   T['response'],
   T['body'],
   T['query']
 >
+
+export default TypeHandler;

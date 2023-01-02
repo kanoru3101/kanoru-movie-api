@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import axios from 'axios'
 import dotenv from 'dotenv'
-import ApiError from '../errors'
+import ApiError from '@errors'
 
 dotenv.config()
 
