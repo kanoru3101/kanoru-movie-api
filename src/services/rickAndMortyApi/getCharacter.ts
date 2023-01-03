@@ -7,6 +7,9 @@ type CharacterNumber = {
   characterNumber: number
 }
 
+export const MAX_CHARACTERS = 826;
+
+
 const getCharacter = async ({ characterNumber }: CharacterNumber): Promise<Character> => {
   if (!characterNumber) {
     throw new ApiError('Missing characterNumber')
