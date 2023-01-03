@@ -6,6 +6,5 @@ export type SignIn = {
 export type SignUp = {
   password: string,
   email: string,
-  name?: string,
-  slug?: string
+  name?: string
 }

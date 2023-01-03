@@ -8,7 +8,7 @@ class User extends BaseEntity {
   id: string
 
   @Column({ type: 'varchar' })
-  name: string
+  name?: string
 
   @Column({ nullable: false, type: 'varchar', unique: true})
   email: string
@@ -18,6 +18,9 @@ class User extends BaseEntity {
 
   @Column({ nullable: false, type: 'varchar', unique: true})
   slug: string
+
+  @Column({ type: 'varchar'})
+  logo?: string
 }
 
 export default User

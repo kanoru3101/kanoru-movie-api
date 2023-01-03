@@ -14,7 +14,7 @@ const connectDB = new DataSource({
   entities: ['src/models/**.{js,ts}'],
   migrations: ['src/migrations/*.{js,ts}'],
   logging: true,
-  synchronize: true,
+  //synchronize: true,
 })
 
 export default connectDB

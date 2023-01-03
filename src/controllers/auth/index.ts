@@ -4,6 +4,8 @@ import { repostories } from "@services/typeorm"
 import * as authService from "@services/auth"
 import { generateSlug } from "@utils/slugGererator"
 import { User } from "@models"
+import * as rickAndMortyService from "@services/rickAndMortyApi"
+import { MAX_CHARACTERS } from "@services/rickAndMortyApi/getCharacter"
 
 export const signIn = async ({ password, email }: SignIn): Promise<string> => {
   if (!password || !email) {
@@ -42,13 +44,18 @@ export const signUp = async ({ name, password, email}: SignUp): Promise<string> 
 
   const slug = generateSlug({})
 
-  const userName = name || 'User';
+  const hero = await rickAndMortyService.getCharacter({
+    characterNumber: Math.random() * MAX_CHARACTERS | 0,
+  })
+
+  const userName = name || hero.name;
 
   const user = new User()
   user.email = email;
   user.password = passwordHash;
   user.name = userName;
-  user.slug = slug
+  user.slug = slug;
+  user.logo = hero.image;
 
   const data = await repostories.user.save(user)
 
