@@ -27,6 +27,8 @@
       "@utils": ["utils"],
       "@utils/*": ["utils/*"],
       "@models": ["models"],
+      "@constants/*": ["constants/*"],
+      "@constants": ["constants"]
     }
   },
   "ts-node": {

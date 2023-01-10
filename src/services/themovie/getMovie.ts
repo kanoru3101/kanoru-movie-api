@@ -17,9 +17,7 @@ const getMovie = async ({
     throw new ApiError('Missing movieId')
   }
 
-  const data = themovieDB({ url: `movie/${movieId}`, language })
-
-  return data
+  return await themovieDB({ url: `movie/${movieId}`, language })
 }
 
 export default getMovie

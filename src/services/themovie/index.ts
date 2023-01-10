@@ -1,3 +1,5 @@
 import getMovie from './getMovie'
+import getTopRateMovies from './getTopRateMovies'
+import getTrending from './getTrending'
 
-export { getMovie }
+export { getMovie, getTopRateMovies, getTrending }
