@@ -4,6 +4,7 @@ import { myMiddleware, morganMiddleware, errorHandler, authMiddleware } from './
 import routers from './routes'
 import bodyParser from 'body-parser'
 import connectDB from './config/ormconfig'
+import cors from 'cors';
 
 dotenv.config()
 
@@ -29,6 +30,7 @@ const PORT = (process.env.PORT || 8080) as number
 const HOST = process.env.HOST || '0.0.0.0'
 const app: Express = express()
 
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}))
 app.use(bodyParser.json({ limit: '50mb', type: 'application/json' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 

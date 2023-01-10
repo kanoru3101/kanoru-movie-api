@@ -2,6 +2,7 @@ import type { RequestHandler } from 'express'
 import morganMiddleware from './morganMiddleware'
 import errorHandler from './errorHandler'
 import authMiddleware from './authMiddleware'
+import cors from './cors'
 
 const myMiddleware: RequestHandler = (req, _res, next) => {
   // eslint-disable-next-line no-console
@@ -9,4 +10,4 @@ const myMiddleware: RequestHandler = (req, _res, next) => {
   next()
 }
 
-export { myMiddleware, morganMiddleware, errorHandler, authMiddleware }
+export { myMiddleware, morganMiddleware, errorHandler, authMiddleware, cors }
