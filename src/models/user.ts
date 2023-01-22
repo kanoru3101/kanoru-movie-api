@@ -5,7 +5,7 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
 })
 class User extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: string
+  id: number
 
   @Column({ type: 'varchar' })
   name?: string
