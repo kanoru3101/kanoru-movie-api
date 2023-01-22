@@ -2,6 +2,7 @@ import { Router } from 'express'
 import * as authController from '@controllers/auth'
 import { SignIn, SingUp } from './types'
 import { TypeHandler, routeHandler } from '@utils'
+import ApiError from '@errors'
 
 const router = Router()
 
