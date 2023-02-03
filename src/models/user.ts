@@ -1,3 +1,4 @@
+import { LANGUAGES } from '@constants'
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
 
 @Entity({
@@ -21,6 +22,9 @@ class User extends BaseEntity {
 
   @Column({ type: 'varchar'})
   logo?: string
+
+  @Column({ type: 'varchar'})
+  language: LANGUAGES
 }
 
 export default User
