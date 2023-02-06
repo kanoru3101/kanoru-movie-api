@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import * as userController from '@controllers/user'
 import { GetUser } from './types'
-import {routeHandler, TypeHandler} from '@utils'
+import { routeHandler, TypeHandler } from '@utils'
 
 const router = Router()
 
