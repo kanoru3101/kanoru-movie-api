@@ -2,7 +2,6 @@ import { Router } from 'express'
 import * as authController from '@controllers/auth'
 import { SignIn, SingUp } from './types'
 import { TypeHandler, routeHandler } from '@utils'
-import ApiError from '@errors'
 
 const router = Router()
 
@@ -17,7 +16,6 @@ router
     res.status(200).json({ token })
   }))
   .put('/', routeHandler(async (req: TypeHandler<SingUp>, res) => {
-     
     const token = await authController.signUp({
       name: req.body.name,
       email: req.body.email,

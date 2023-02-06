@@ -1,17 +1,19 @@
 import { Router } from 'express'
 import * as userController from '@controllers/user'
 import { GetUser } from './types'
-import { TypeHandler } from '@utils'
+import { routeHandler, TypeHandler } from '@utils'
 
 const router = Router()
 
+router.get(
+  '/',
+  routeHandler(async (req: TypeHandler<GetUser>, res) => {
+    const userId = req.user?.id
+    console.log("####", req.user);
+    const user = await userController.getUser({ userId })
 
-router.get('/', async (req: TypeHandler<GetUser>, res) => {
-  const userId = req.user?.id;
+    res.status(200).json(user)
+  })
+)
 
-  const user = await userController.getUser({ userId })
-
-  res.status(200).json(user)
-})
-
-export default router;
+export default router
