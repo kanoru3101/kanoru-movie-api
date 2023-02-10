@@ -4,7 +4,6 @@ import { ErrorRequestHandler } from 'express'
 const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
   const status = err.status || 400
   const message = err.message
-  
   res.status(status).json({ message })
 }
 

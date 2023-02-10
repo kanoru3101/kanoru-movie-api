@@ -11,6 +11,7 @@ type ThemoviedbProps = {
   url: string
   language?: string
   params?: { [key: string]: number | string | undefined }
+  appendToResponse?: string[]
 }
 
 type BuildQueryParams = { [key: string]: number | string | undefined }
@@ -25,7 +26,7 @@ const instance = axios.create({
 const buildQueryParams = (params: BuildQueryParams): string => {
   const cleanedObject = _.pickBy(params, v => v !== undefined)
   console.log("####cleanedObject", cleanedObject);
-  
+
   if (Object.keys(cleanedObject).length == 0) {
     return ''
   }
@@ -33,17 +34,26 @@ const buildQueryParams = (params: BuildQueryParams): string => {
   return `&${queryString.stringify(cleanedObject)}`
 }
 
+const buildAppendToResponse = (values: Array<string>): string => {
+  if (!values.length) {
+    return ''
+  }
+
+  return `&append_to_response=${_.join(values, ',')}`
+}
+
 const themovieDB = async({
   url,
   language = 'en',
   params,
+  appendToResponse,
 }: ThemoviedbProps): Promise<any> => {
   try {
     const additionalParams = params ? buildQueryParams(params) : ''
-    console.log("####", `${url}?language=${language}&api_key=${THEMOVIE_API_KEY}${additionalParams}`);
-    
+    const appendToResponseParams = buildAppendToResponse(appendToResponse || [])
+    console.log("###URL", `${url}?language=${language}&api_key=${THEMOVIE_API_KEY}${appendToResponseParams}${additionalParams}`)
     const { data } = await instance.get(
-      `${url}?language=${language}&api_key=${THEMOVIE_API_KEY}${additionalParams}`
+      `${url}?language=${language}&api_key=${THEMOVIE_API_KEY}${appendToResponseParams}${additionalParams}`
     )
 
     return data

@@ -5,6 +5,7 @@ import routers from './routes'
 import bodyParser from 'body-parser'
 import connectDB from './config/ormconfig'
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 dotenv.config()
 
@@ -31,6 +32,7 @@ const HOST = process.env.HOST || '0.0.0.0'
 const app: Express = express()
 
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}))
+app.use(cookieParser())
 app.use(bodyParser.json({ limit: '50mb', type: 'application/json' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
