@@ -10,11 +10,18 @@ export const getTopRate =async (): Promise<GetTopRateMovieResponse> => {
 };
 
 export const getTrending =async (): Promise<TrendingResponse> => {
-  return await themovieService.getTrending({
+  const data = await themovieService.getTrending({
     language: 'en',
     timeWindow: TRENDING_TIME_WINDOW.WEEK,
     mediaType: TRENDING_MEDIA_TYPE.ALL
   })
+
+  data.results = data.results.map((item) => {
+    const backdrop_path = `https://image.tmdb.org/t/p/original${item.backdrop_path}`
+    return {...item, backdrop_path }
+  })
+
+  return data;
 };
 
 export const getMovieById = async ({

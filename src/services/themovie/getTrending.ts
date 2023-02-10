@@ -16,8 +16,8 @@ const getTrending = async ({
   mediaType,
   timeWindow,
 }: Trending): Promise<TrendingResponse> => {
-
-  return await themovieDB({ url: `trending/${mediaType}/${timeWindow}`, language })
+  const appendToResponse = ['videos']
+  return await themovieDB({ url: `trending/${mediaType}/${timeWindow}`, language, appendToResponse })
 }
 
 export default getTrending

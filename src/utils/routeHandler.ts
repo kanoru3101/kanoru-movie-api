@@ -17,7 +17,7 @@ ReqQuery,
 ): Promise<void>  => {
   try {
     await handler(req, res);
-  } catch (error) {   
+  } catch (error) {
     next(error);
   }
 }

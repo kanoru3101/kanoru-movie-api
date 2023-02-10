@@ -5,8 +5,6 @@ import authMiddleware from './authMiddleware'
 import cors from './cors'
 
 const myMiddleware: RequestHandler = (req, _res, next) => {
-  // eslint-disable-next-line no-console
-  // console.log('#### REQUEST', req.url)
   next()
 }
 
