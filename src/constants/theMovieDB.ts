@@ -9,3 +9,14 @@ export enum TRENDING_MEDIA_TYPE {
   TV = 'tv',
   PERSON = 'person'
 }
+
+export enum MOVIE_LANGUAGE {
+  EN= 'en',
+  UA = 'uk',
+}
+
+export enum MOVIE_VIDEO_TYPE {
+  TRAILER = 'Trailer',
+  TEASER = 'Teaser',
+  FEATURETTE = 'Featurette',
+}

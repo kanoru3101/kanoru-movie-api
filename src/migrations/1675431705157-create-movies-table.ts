@@ -44,15 +44,15 @@ export class createMoviesTable1675431705157 implements MigrationInterface {
                     name: 'overview_ua',
                     type: 'varchar',
                     isNullable: true,
-                },      
+                },
                 {
                     name: 'original_title',
                     type: 'varchar',
-                },   
+                },
                 {
                     name: 'original_language',
                     type: 'varchar',
-                },   
+                },
                 {
                     name: 'adult',
                     type: 'boolean',
@@ -75,7 +75,7 @@ export class createMoviesTable1675431705157 implements MigrationInterface {
                 {
                     name: 'popularity',
                     type: 'integer',
-                },   
+                },
                 {
                     name: 'poster_path',
                     type: 'varchar',
@@ -109,7 +109,7 @@ export class createMoviesTable1675431705157 implements MigrationInterface {
                 {
                     name: 'vote_count',
                     type: 'integer',
-                },   
+                },
                 {
                     default: 'now()',
                     name: 'createdAt',

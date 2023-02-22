@@ -11,7 +11,7 @@ const connectDB = new DataSource({
   username: process.env.POSTGRES_USER || 'postgres',
   password: process.env.POSTGRES_PASSWORD || 'postgres',
   database: process.env.POSTGRES_DB || 'postgres',
-  entities: ['src/models/**.{js,ts}'],
+  entities: ['src/models/*.{js,ts}'],
   migrations: ['src/migrations/*.{js,ts}'],
   logging: true,
   //synchronize: true,

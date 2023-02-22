@@ -3,18 +3,24 @@ import { GetMovieById, GetMovieByIdResponse } from './types'
 import * as themovieService from '@services/themovie'
 import { TrendingResponse } from '@services/themovie/getTrending';
 import { GetTopRateMovieResponse } from '@services/themovie/getTopRateMovies';
-
+import {createOrUpdateGenres} from "@services/genre";
+import {createOrUpdateMovie} from "@services/movie";
+import allSettled from "@utils/allSettled";
 
 export const getTopRate =async (): Promise<GetTopRateMovieResponse> => {
   return await themovieService.getTopRateMovies({ language: 'en' })
 };
 
-export const getTrending =async (): Promise<TrendingResponse> => {
+export const getTrending = async (): Promise<TrendingResponse> => {
   const data = await themovieService.getTrending({
     language: 'en',
     timeWindow: TRENDING_TIME_WINDOW.WEEK,
     mediaType: TRENDING_MEDIA_TYPE.ALL
   })
+  await createOrUpdateGenres()
+
+  const movieIds = data.results.map((movie) => movie.id);
+  const updateMovies = await allSettled(movieIds.map(movieId => createOrUpdateMovie({movieId})));
 
   data.results = data.results.map((item) => {
     const backdrop_path = `https://image.tmdb.org/t/p/original${item.backdrop_path}`

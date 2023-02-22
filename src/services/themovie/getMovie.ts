@@ -7,17 +7,15 @@ export type GetMovie = {
   language?: string
 }
 
-export type GetMovieResponse = Movie
-
 const getMovie = async ({
   movieId,
   language,
-}: GetMovie): Promise<Movie | null> => {
+}: GetMovie): Promise<Movie> => {
   if (!movieId) {
     throw new ApiError('Missing movieId')
   }
 
-  return await themovieDB({ url: `movie/${movieId}`, language })
+  return await themovieDB({ url: `movie/${movieId}`, language, appendToResponse: ['videos'] })
 }
 
 export default getMovie

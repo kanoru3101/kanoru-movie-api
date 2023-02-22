@@ -1,6 +1,6 @@
 import ApiError, { HTTP_STATUS_CODE } from "errors"
 import { SignIn, SignUp } from "./types"
-import { repostories } from "@services/typeorm"
+import { repositories } from "@services/typeorm"
 import * as authService from "@services/auth"
 import { generateSlug } from "@utils/slugGererator"
 import { User } from "@models"
@@ -14,10 +14,10 @@ export const signIn = async ({ password, email }: SignIn): Promise<string> => {
 
   const passwordHash = authService.createPasswordHash({ password })
 
-  const user = await repostories.user.findOne({
+  const user = await repositories.user.findOne({
     where: { email }
   })
-  
+
   if (!user || passwordHash !== user?.password) {
     throw new ApiError('Wrong email or password', HTTP_STATUS_CODE.NOT_FOUND)
   }
@@ -34,7 +34,7 @@ export const signUp = async ({ name, password, email}: SignUp): Promise<string> 
 
   const passwordHash = authService.createPasswordHash({ password })
 
-  const foundUser = await repostories.user.findOne({
+  const foundUser = await repositories.user.findOne({
     where: { email }
   })
 
@@ -57,7 +57,7 @@ export const signUp = async ({ name, password, email}: SignUp): Promise<string> 
   user.slug = slug;
   user.logo = hero.image;
 
-  const data = await repostories.user.save(user)
+  const data = await repositories.user.save(user)
 
   const token = authService.generateJWT({ id: data.id, email: user.email })
 

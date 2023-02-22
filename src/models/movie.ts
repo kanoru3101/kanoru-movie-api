@@ -1,6 +1,6 @@
 import { MOVIE_STATUSES } from '@constants/index'
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable } from 'typeorm'
-import Genre from './genre'
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable, OneToMany} from 'typeorm'
+import {Genre, Video} from './'
 
 @Entity({
   name: 'movie',
@@ -12,8 +12,8 @@ class Movie extends BaseEntity {
   @Column({ type: 'integer', unique: true})
   movie_db_id: number
 
-  @Column({ type: 'integer', unique: true })
-  imdb_id: number
+  @Column({ type: 'varchar', unique: true })
+  imdb_id: string
 
   @Column({ type: 'varchar', nullable: true })
   title?: string
@@ -23,7 +23,7 @@ class Movie extends BaseEntity {
 
   @Column({ type: 'varchar', nullable: true })
   overview?: string
-  
+
   @Column({ type: 'varchar', nullable: true })
   overview_ua?: string
 
@@ -37,7 +37,10 @@ class Movie extends BaseEntity {
   adult: boolean
 
   @Column({ type: 'varchar', nullable: true })
-  backdrop_path?: string
+  backdrop_path?: string | null
+
+  @Column({ type: 'varchar', nullable: true })
+  backdrop_path_ua?: string | null
 
   @Column({ type: 'integer', nullable: true })
   budget?: number
@@ -45,11 +48,14 @@ class Movie extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   homepage?: string
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'real' })
   popularity: number
 
   @Column({ type: 'varchar', nullable: true })
   poster_path?: string
+
+  @Column({ type: 'varchar', nullable: true })
+  poster_path_ua?: string
 
   @Column({ type: 'varchar' })
   release_date: string
@@ -66,18 +72,24 @@ class Movie extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   tagline?: string
 
+  @Column({ type: 'varchar', nullable: true })
+  tagline_ua?: string
+
   @Column({ type: 'boolean' })
   video: boolean
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'real' })
   vote_average?: number
 
   @Column({ type: 'integer' })
-  vote_count?: number
+  vote_count?: number;
 
   @ManyToMany(() => Genre, (genre) => genre.movies)
   @JoinTable()
-  genres: Genre[]
+  genres: Genre[];
+
+  @OneToMany(() => Video, (video) => video.movie)
+  videos: Video[];
 }
 
 export default Movie

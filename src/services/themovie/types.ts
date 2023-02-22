@@ -1,3 +1,5 @@
+import {LANGUAGES, MOVIE_LANGUAGE, MOVIE_VIDEO_TYPE} from "@constants";
+
 export type Movie = {
   adult: boolean
   backdrop_path: string
@@ -14,7 +16,7 @@ export type Movie = {
   }>
   homepage: string
   id: number
-  imdb_id: number
+  imdb_id: string
   original_language: string
   original_title: string
   overview: string
@@ -30,7 +32,7 @@ export type Movie = {
     iso_3166_1: string
     name: string
   }>
-  release_date: Date // "2015-05-13",
+  release_date: string // "2015-05-13",
   revenue: number
   runtime: number
   spoken_languages: Array<{
@@ -44,7 +46,22 @@ export type Movie = {
   video: boolean
   vote_average: number
   vote_count: number
+  videos?: {
+    results: Array<{
+      iso_639_1: MOVIE_LANGUAGE,
+      iso_3166_1: LANGUAGES,
+      name: string,
+      key: string,
+      site: string, // YouTube, etc...
+      size: number,
+      type: MOVIE_VIDEO_TYPE,
+      official: boolean,
+      published_at: string, // "2023-01-07T00:20:13.000Z"
+      id: string,
+    }>,
+  }
 }
+
 
 export type TheMoviePagination = {
   page: number,
@@ -68,4 +85,9 @@ export type MovieListResultObject = {
   vote_count: number
   video: boolean
   vote_average: number
+}
+
+export type Genre = {
+  id: number
+  name: string
 }

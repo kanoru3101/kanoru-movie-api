@@ -1,6 +1,6 @@
 import dataSource from '@config/ormconfig';
 import * as models from '@models'
-import * as repostories from './repostories';
+import * as repositories from './repositories';
 
 export default dataSource;
-export { models, repostories }
+export { models, repositories }

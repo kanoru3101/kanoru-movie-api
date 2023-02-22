@@ -1,6 +1,6 @@
 import ApiError from "errors"
 import { GetUser, GetUserResponse } from "./types"
-import { repostories } from "@services/typeorm"
+import { repositories } from "@services/typeorm"
 
 export const getUser = async ({ userId }: GetUser): Promise<GetUserResponse> => {
   if (!userId) {
@@ -8,7 +8,7 @@ export const getUser = async ({ userId }: GetUser): Promise<GetUserResponse> => 
   }
 
 
-  const user = await repostories.user.findOne({ where: { id: userId } })
+  const user = await repositories.user.findOne({ where: { id: userId } })
 
   if (!user) {
     throw new ApiError("User didn't find")

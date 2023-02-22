@@ -20,7 +20,7 @@ const THEMOVIE_API_KEY = process.env.THEMOVIE_API_KEY
 
 const instance = axios.create({
   baseURL: 'https://api.themoviedb.org/3/',
-  timeout: 1000,
+  timeout: 8000,
 })
 
 const buildQueryParams = (params: BuildQueryParams): string => {

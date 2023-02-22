@@ -23,7 +23,6 @@ const getUserFromToken = ({ token }: { token?: string}): ReqUser | null => {
 
 const authMiddleware: RequestHandler = (req, _res, next) => {
   const token = req.cookies?.auth;
-  console.log("####cookies", req.cookies)
   req.user = getUserFromToken({ token });
 
   next()
