@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable } from 'typeorm'
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable} from 'typeorm'
 import Movie from './movie'
 
 @Entity({
@@ -17,8 +17,7 @@ class Genre extends BaseEntity {
   @Column({ type: 'varchar', unique: true })
   name_ua: string
 
-
-  @ManyToMany(() => Movie, (movie) => movie.genres)
+  @ManyToMany(() => Movie, (movie) => movie.genres, { cascade: true, eager: true, onUpdate: "CASCADE", onDelete: "CASCADE"})
   @JoinTable()
   movies: Movie[]
 }

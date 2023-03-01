@@ -1,6 +1,7 @@
 import { MOVIE_STATUSES } from '@constants/index'
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable, OneToMany} from 'typeorm'
-import {Genre, Video} from './'
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, OneToMany} from 'typeorm'
+import Genre from "./genre";
+import Video from "./video";
 
 @Entity({
   name: 'movie',
@@ -60,7 +61,7 @@ class Movie extends BaseEntity {
   @Column({ type: 'varchar' })
   release_date: string
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'bigint' })
   revenue: number
 
   @Column({ type: 'integer', nullable: true })
@@ -85,7 +86,6 @@ class Movie extends BaseEntity {
   vote_count?: number;
 
   @ManyToMany(() => Genre, (genre) => genre.movies)
-  @JoinTable()
   genres: Genre[];
 
   @OneToMany(() => Video, (video) => video.movie)

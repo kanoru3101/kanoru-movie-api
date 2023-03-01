@@ -6,6 +6,7 @@ import { generateSlug } from "@utils/slugGererator"
 import { User } from "@models"
 import * as rickAndMortyService from "@services/rickAndMortyApi"
 import { MAX_CHARACTERS } from "@services/rickAndMortyApi/getCharacter"
+import {LANGUAGES} from "@constants";
 
 export const signIn = async ({ password, email }: SignIn): Promise<string> => {
   if (!password || !email) {
@@ -27,7 +28,7 @@ export const signIn = async ({ password, email }: SignIn): Promise<string> => {
   return token;
 }
 
-export const signUp = async ({ name, password, email}: SignUp): Promise<string> => {
+export const signUp = async ({ name, password, email, language = LANGUAGES.UA }: SignUp): Promise<string> => {
   if (!password || !email) {
     throw new ApiError('Missing password || email')
   }
@@ -56,6 +57,7 @@ export const signUp = async ({ name, password, email}: SignUp): Promise<string> 
   user.name = userName;
   user.slug = slug;
   user.logo = hero.image;
+  user.language = language
 
   const data = await repositories.user.save(user)
 

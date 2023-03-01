@@ -3,7 +3,8 @@ import {getMovie} from "@services/themovie";
 import Bluebird from 'bluebird';
 import {MOVIE_LANGUAGE, MOVIE_STATUSES} from "@constants";
 import {repositories} from "@services/typeorm";
-import {Movie} from "@models";
+import {Genre} from "@models";
+import {getAllGenres, getGenreById} from "@services/genre";
 
 
 // export const getMovieTrailer = ({ language, videos}: { language: MOVIE_LANGUAGE, videos: Movie["videos"]}): string | null => {
@@ -46,7 +47,11 @@ export type CreateOrUpdateMovieV2 = {
 
 export const createOrUpdateMovieV2 = async (movieData: CreateOrUpdateMovieV2): Promise<any> => {
     const findMovie = await repositories.movie.findOne({ where: { movie_db_id: movieData.movie_db_id } });
-
+    console.log("###findMovie", findMovie)
+    console.log("###DATA", {
+        ...findMovie,
+        ...movieData
+    });
     return await repositories.movie.save({
         ...findMovie,
         ...movieData
@@ -57,6 +62,12 @@ export const createOrUpdateMovie = async ({movieId}: CreateOrUpdateMovieProps): 
     const [enMovie, uaMovie] = await Bluebird.mapSeries(
         [MOVIE_LANGUAGE.EN, MOVIE_LANGUAGE.UA],
        (language) => getMovie({ movieId, language }))
+
+    // Genres
+    const allGenres = await getAllGenres()
+    // console.log("#####allGenres")
+    const enGenres = enMovie.genres?.map((genre) => genre.id);
+    const uaGenres = uaMovie.genres?.map((genre) => genre.id);
 
     const inputData = {
         movie_db_id: movieId,
@@ -84,13 +95,25 @@ export const createOrUpdateMovie = async ({movieId}: CreateOrUpdateMovieProps): 
         video: enMovie.video,
         vote_average: enMovie.vote_average,
         vote_count: enMovie.vote_count,
+        //genres: genreIds.map((id) => ({genre_id: id}))
+        genres: [{id: 2}, {id:10}],
     }
 
     const movie = await createOrUpdateMovieV2(inputData);
 
-    //console.log("####MOVIE", movie)
+
+    // eslint-disable-next-line no-console
+    console.log("####MOVIE", movie)
+
+    // const movie2 = await movie.save({
+    //     ...movie,
+    //     genres: genreIds.map((id) => ({ genreId: id }))
+    // })
+
     const enVideos = enMovie.videos?.results?.map((video) => video) || [];
     const uaVideos = uaMovie.videos?.results?.map((video) => video) || [];
+
+
 
     const videos = [...enVideos, ...uaVideos].map((video) => ({
         movie_id: movieId,

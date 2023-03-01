@@ -11,6 +11,8 @@ const allSettled = async <T>(promises: T[]): Promise<T[]> => {
         }
     })
     // TODO: Add saving error on some handler
+    // eslint-disable-next-line no-console
+    console.error("###ERROR", errors)
 
     return values;
 }

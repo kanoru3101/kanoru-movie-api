@@ -19,7 +19,7 @@ export const getTrending = async (): Promise<TrendingResponse> => {
   })
   await createOrUpdateGenres()
 
-  const movieIds = data.results.map((movie) => movie.id);
+  const movieIds = data.results.map((movie) => movie.id).slice(0,1);
   const updateMovies = await allSettled(movieIds.map(movieId => createOrUpdateMovie({movieId})));
 
   data.results = data.results.map((item) => {
