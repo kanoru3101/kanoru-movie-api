@@ -1,11 +1,11 @@
 import themovieDB from '@config/themovieDB'
-import { Movie } from './types'
+import { MovieDB } from './types'
 
 export type GetLatestMovies = {
   language?: string
 }
 
-export type GetLatestMoviesResponse = Movie
+export type GetLatestMoviesResponse = MovieDB
 
 const getLatestMovie = async ({
   language

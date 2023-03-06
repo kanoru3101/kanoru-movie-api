@@ -1,6 +1,6 @@
 import themovieDB from '@config/themovieDB'
 import ApiError from '@errors'
-import { Movie } from './types'
+import { MovieDB } from './types'
 
 export type GetMovie = {
   movieId: number
@@ -10,7 +10,7 @@ export type GetMovie = {
 const getMovie = async ({
   movieId,
   language,
-}: GetMovie): Promise<Movie> => {
+}: GetMovie): Promise<MovieDB> => {
   if (!movieId) {
     throw new ApiError('Missing movieId')
   }

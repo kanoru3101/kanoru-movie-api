@@ -1,18 +1,18 @@
 import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne} from 'typeorm'
-import Movie from './movie'
-import {MOVIE_LANGUAGE} from "@constants";
+import Movie from './Movie'
+import {MOVIE_LANGUAGE, MOVIE_VIDEO_TYPE} from "@constants";
 
 @Entity({
     name: 'video',
 })
 class Video extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id: string
+    id: number
+
+    // @Column({type: 'varchar', nullable: true})
+    // movie_id: string
 
     @Column({type: 'varchar'})
-    movie_id: string
-
-    @Column({type: 'varchar', unique: true})
     movie_db_id: string
 
     @Column({type: 'varchar'})
@@ -28,7 +28,7 @@ class Video extends BaseEntity {
     key: string
 
     @Column({type: 'varchar'})
-    type: string
+    type: MOVIE_VIDEO_TYPE
 
     @Column({type: 'integer'})
     size: number

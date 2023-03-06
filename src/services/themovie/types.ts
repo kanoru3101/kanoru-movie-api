@@ -1,6 +1,6 @@
 import {LANGUAGES, MOVIE_LANGUAGE, MOVIE_VIDEO_TYPE} from "@constants";
 
-export type Movie = {
+export type MovieDB = {
   adult: boolean
   backdrop_path: string
   belongs_to_collection?: {
@@ -87,7 +87,7 @@ export type MovieListResultObject = {
   vote_average: number
 }
 
-export type Genre = {
+export type GenreDB = {
   id: number
   name: string
 }

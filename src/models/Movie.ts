@@ -1,7 +1,7 @@
 import { MOVIE_STATUSES } from '@constants/index'
 import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, OneToMany} from 'typeorm'
-import Genre from "./genre";
-import Video from "./video";
+import Genre from "./Genre";
+import Video from "./Video";
 
 @Entity({
   name: 'movie',
@@ -85,10 +85,10 @@ class Movie extends BaseEntity {
   @Column({ type: 'integer' })
   vote_count?: number;
 
-  @ManyToMany(() => Genre, (genre) => genre.movies)
+  @ManyToMany(() => Genre, (genre) => genre.movies, { cascade: true, eager: true, onUpdate: "CASCADE", onDelete: "CASCADE"})
   genres: Genre[];
 
-  @OneToMany(() => Video, (video) => video.movie)
+  @OneToMany(() => Video, (video) => video.movie, { cascade: true, eager: true, onUpdate: "CASCADE", onDelete: "CASCADE"})
   videos: Video[];
 }
 

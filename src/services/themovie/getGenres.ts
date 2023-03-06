@@ -1,5 +1,5 @@
 import themovieDB from '@config/themovieDB'
-import {Genre} from "./types";
+import {GenreDB} from "./types";
 
 export type GetGenres = {
     language?: string
@@ -7,7 +7,7 @@ export type GetGenres = {
 
 const getGenres = async ({
     language,
-}: GetGenres): Promise<Array<Genre>> => {
+}: GetGenres): Promise<Array<GenreDB>> => {
     const { genres } = await themovieDB({url: `genre/movie/list`, language})
     return genres
 }
