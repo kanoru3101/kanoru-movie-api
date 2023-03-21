@@ -2,8 +2,10 @@ import { User } from '@models';
 import type { RequestHandler } from 'express'
 import { IncomingMessage } from 'http';
 import * as authService from '@services/auth'
+import * as userController from "@controllers/user";
 
-export type ReqUser = Pick<User, 'id' | 'email'>
+export type ReqUser = Pick<User, 'id' | 'email' | 'name' | 'slug' | 'logo' | 'language'>
+export type ReqUserToken = Pick<User, 'id' | 'email'>
 
 declare module 'http' {
   interface IncomingMessage {
@@ -11,7 +13,7 @@ declare module 'http' {
   }
 }
 
-const getUserFromToken = ({ token }: { token?: string}): ReqUser | null => {
+const getUserFromToken = ({ token }: { token?: string}): ReqUserToken | null => {
   if (!token) {
     return null;
   }
@@ -21,9 +23,15 @@ const getUserFromToken = ({ token }: { token?: string}): ReqUser | null => {
 
 
 
-const authMiddleware: RequestHandler = (req, _res, next) => {
+const authMiddleware: RequestHandler = async (req, _res, next) => {
   const token = req.cookies?.auth;
-  req.user = getUserFromToken({ token });
+  const userToken = getUserFromToken({ token });
+
+  if (userToken) {
+    req.user = await userController.getUser({ userId: userToken.id })
+  } else {
+    req.user = null
+  }
 
   next()
 }

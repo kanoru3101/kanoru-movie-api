@@ -1,6 +1,5 @@
 import { GetMovieByIdResponse } from '@controllers/movies/types'
-import { GetTopRateMovieResponse } from '@services/themovie/getTopRateMovies'
-import { TrendingResponse } from '@services/themovie/getTrending'
+import {Movie} from "@models";
 
 export type GetMovie = {
   query: void
@@ -13,13 +12,20 @@ export type GetTrending = {
   query: void
   body: void
   params: void
-  response: TrendingResponse
+  response: Movie[]
 }
 
 export type GetTopRate = {
   query: void
   body: void
   params: void
-  response: GetTopRateMovieResponse
+  response: Movie[]
+}
+
+export type GetNowPlaying = {
+  query: void
+  body: void
+  params: void
+  response: Movie[]
 }
 

@@ -1,33 +1,35 @@
-import { TRENDING_MEDIA_TYPE, TRENDING_TIME_WINDOW } from '@constants/theMovieDB';
-import { GetMovieById, GetMovieByIdResponse } from './types'
+import {MOVIE_LANGUAGE, TRENDING_MEDIA_TYPE, TRENDING_TIME_WINDOW} from '@constants/theMovieDB';
+import {GetMovieById, GetMovieByIdResponse} from './types'
 import * as themovieService from '@services/themovie'
-import { TrendingResponse } from '@services/themovie/getTrending';
-import { GetTopRateMovieResponse } from '@services/themovie/getTopRateMovies';
-import {createOrUpdateGenres} from "@services/genre";
-import {createOrUpdateMovie} from "@services/movie";
-import allSettled from "@utils/allSettled";
+import { movieUpdater } from '@services/updater';
+import {Movie} from "@models";
 
-export const getTopRate =async (): Promise<GetTopRateMovieResponse> => {
-  return await themovieService.getTopRateMovies({ language: 'en' })
+export const getTopRate =async ({ language = MOVIE_LANGUAGE.EN }: { language?: MOVIE_LANGUAGE }): Promise<Movie[]> => {
+  const themovieData = await themovieService.getTopRateMovies({ language })
+  return await movieUpdater({
+    movieIds: themovieData.results.map((movie) => movie.id),
+    language }
+  );
 };
 
-export const getTrending = async (): Promise<TrendingResponse> => {
+export const getTrending = async ({ language = MOVIE_LANGUAGE.EN }: { language?: MOVIE_LANGUAGE }): Promise<Movie[]> => {
   const data = await themovieService.getTrending({
-    language: 'en',
+    language,
     timeWindow: TRENDING_TIME_WINDOW.WEEK,
     mediaType: TRENDING_MEDIA_TYPE.ALL
   })
-  await createOrUpdateGenres()
 
-  const movieIds = data.results.map((movie) => movie.id).slice(0,5);
-  const updateMovies = await allSettled(movieIds.map(movieId => createOrUpdateMovie({movieId})));
+  const movieIds = data.results.map((movie) => movie.id);
+  return await movieUpdater({ movieIds, language });
+};
 
-  data.results = data.results.map((item) => {
-    const backdrop_path = `https://image.tmdb.org/t/p/original${item.backdrop_path}`
-    return {...item, backdrop_path }
+export const getNowPlaying = async ({ language = MOVIE_LANGUAGE.EN }: { language?: MOVIE_LANGUAGE }): Promise<Movie[]> => {
+  const data = await themovieService.getNowPlaying({
+    language,
   })
 
-  return data;
+  const movieIds = data.results.map((movie) => movie.id);
+  return await movieUpdater({ movieIds, language });
 };
 
 export const getMovieById = async ({

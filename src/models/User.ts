@@ -1,5 +1,5 @@
 import { LANGUAGES } from '@constants'
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn} from 'typeorm'
 
 @Entity({
   name: 'user',
@@ -25,6 +25,12 @@ class User extends BaseEntity {
 
   @Column({ type: 'varchar'})
   language: LANGUAGES
+
+  @CreateDateColumn({ type: "timestamp", default: () => "current_timestamp" })
+  public created_at: Date;
+
+  @UpdateDateColumn({ type: "timestamp", default: () => "current_timestamp", onUpdate: "current_timestamp" })
+  public updated_at: Date;
 }
 
 export default User

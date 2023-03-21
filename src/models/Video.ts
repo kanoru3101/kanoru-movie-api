@@ -1,4 +1,12 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne} from 'typeorm'
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    BaseEntity,
+    ManyToOne,
+    CreateDateColumn,
+    UpdateDateColumn
+} from 'typeorm'
 import Movie from './Movie'
 import {MOVIE_LANGUAGE, MOVIE_VIDEO_TYPE} from "@constants";
 
@@ -8,9 +16,6 @@ import {MOVIE_LANGUAGE, MOVIE_VIDEO_TYPE} from "@constants";
 class Video extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
-
-    // @Column({type: 'varchar', nullable: true})
-    // movie_id: string
 
     @Column({type: 'varchar'})
     movie_db_id: string
@@ -38,6 +43,12 @@ class Video extends BaseEntity {
 
     @Column({type: "varchar"})
     published_at: string
+
+    @CreateDateColumn({ type: "timestamp", default: () => "current_timestamp" })
+    public created_at: Date;
+
+    @UpdateDateColumn({ type: "timestamp", default: () => "current_timestamp", onUpdate: "current_timestamp" })
+    public updated_at: Date;
 
     @ManyToOne(() => Movie, (movie) => movie.videos)
     movie: Movie

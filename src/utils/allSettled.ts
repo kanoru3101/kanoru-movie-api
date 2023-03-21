@@ -1,5 +1,5 @@
-const allSettled = async <T>(promises: T[]): Promise<T[]> => {
-    const values = [] as T[];
+const allSettled = async <T>(promises: T[]): Promise<Array<Awaited<T>>> => {
+    const values = [] as Array<Awaited<T>>;
     const errors = [] as string[];
     const workedPromises = await Promise.allSettled(promises)
 
@@ -13,7 +13,6 @@ const allSettled = async <T>(promises: T[]): Promise<T[]> => {
     // TODO: Add saving error on some handler
     // eslint-disable-next-line no-console
     console.error("###ERROR", errors)
-
     return values;
 }
 
