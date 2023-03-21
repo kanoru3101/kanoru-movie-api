@@ -1,6 +1,7 @@
 # kanoru-movie-api
 
 ## Create migration
-
-Example:
 ```npm run migration:create --name=create-user-table```
+
+## Generate migration
+```npm run migrate:generate --name=name-changes```

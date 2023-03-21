@@ -20,12 +20,11 @@ const THEMOVIE_API_KEY = process.env.THEMOVIE_API_KEY
 
 const instance = axios.create({
   baseURL: 'https://api.themoviedb.org/3/',
-  timeout: 1000,
+  timeout: 8000,
 })
 
 const buildQueryParams = (params: BuildQueryParams): string => {
   const cleanedObject = _.pickBy(params, v => v !== undefined)
-  console.log("####cleanedObject", cleanedObject);
 
   if (Object.keys(cleanedObject).length == 0) {
     return ''
@@ -51,7 +50,6 @@ const themovieDB = async({
   try {
     const additionalParams = params ? buildQueryParams(params) : ''
     const appendToResponseParams = buildAppendToResponse(appendToResponse || [])
-    console.log("###URL", `${url}?language=${language}&api_key=${THEMOVIE_API_KEY}${appendToResponseParams}${additionalParams}`)
     const { data } = await instance.get(
       `${url}?language=${language}&api_key=${THEMOVIE_API_KEY}${appendToResponseParams}${additionalParams}`
     )

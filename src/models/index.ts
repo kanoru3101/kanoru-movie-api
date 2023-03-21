@@ -1,8 +1,9 @@
-import User from './user'
-import Log from './log';
-import Genre from './genre';
-import Movie from './movie';
+import User from './User'
+import Log from './Log';
+import Genre from './Genre';
+import Movie from './Movie';
+import Video from './Video';
 
 export {
-  User, Log, Genre, Movie
+  User, Log, Genre, Movie, Video,
 }

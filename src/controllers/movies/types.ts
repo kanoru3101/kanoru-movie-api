@@ -1,12 +1,12 @@
 import { GetTopRateMovieResponse } from '@services/themovie/getTopRateMovies'
 import { TrendingResponse } from '@services/themovie/getTrending'
-import { Movie } from '@services/themovie/types'
+import { MovieDB } from '@services/themovie/types'
 
 export type GetMovieById = {
   movieId: number
 }
 
-export type GetMovieByIdResponse = Movie | null
+export type GetMovieByIdResponse = MovieDB | null
 
 export type GetMovies = {
   trending: TrendingResponse
