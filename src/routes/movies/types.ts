@@ -4,7 +4,7 @@ import {Movie} from "@models";
 export type GetMovie = {
   query: void
   body: void
-  params: { movieId: number }
+  params: { imdbId: string }
   response: GetMovieByIdResponse
 }
 
@@ -26,6 +26,13 @@ export type GetNowPlaying = {
   query: void
   body: void
   params: void
+  response: Movie[]
+}
+
+export type GetRecommendations = {
+  query: void
+  body: void
+  params: { imdbId: string }
   response: Movie[]
 }
 

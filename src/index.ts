@@ -1,11 +1,12 @@
 import express, { Express } from 'express'
 import dotenv from 'dotenv'
-import { myMiddleware, morganMiddleware, errorHandler, authMiddleware } from './middlewares'
+import {myMiddleware, morganMiddleware, errorHandler, authMiddleware, languageMiddleware} from './middlewares'
 import routers from './routes'
 import bodyParser from 'body-parser'
 import connectDB from './config/ormconfig'
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import './http-extensions'
 
 dotenv.config()
 
@@ -38,6 +39,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
 app.use(myMiddleware)
 app.use(authMiddleware)
+app.use(languageMiddleware)
 app.use(morganMiddleware)
 
 app.use(routers)
