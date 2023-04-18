@@ -1,8 +1,10 @@
 import {MOVIE_LANGUAGE, TRENDING_MEDIA_TYPE, TRENDING_TIME_WINDOW} from '@constants/theMovieDB';
-import {GetMovieById, GetMovieByIdResponse} from './types'
+import {GetMovieById, GetMovieByIdResponse, Movies} from './types'
 import * as themovieService from '@services/themovie'
 import { movieUpdater } from '@services/updater';
 import {Movie} from "@models";
+import {repositories} from "@services/typeorm";
+import ApiError from "@errors";
 
 export const getTopRate =async ({ language = MOVIE_LANGUAGE.EN }: { language?: MOVIE_LANGUAGE }): Promise<Movie[]> => {
   const themovieData = await themovieService.getTopRateMovies({ language })
@@ -33,11 +35,61 @@ export const getNowPlaying = async ({ language = MOVIE_LANGUAGE.EN }: { language
 };
 
 export const getMovieById = async ({
-  movieId,
+  imdbId,
+  language = MOVIE_LANGUAGE.EN,
 }: GetMovieById): Promise<GetMovieByIdResponse> => {
-  if (movieId) {
-    return await themovieService.getMovie({ movieId, language: 'en' })
+  const movie = await repositories.movie.findOne({ where: { language, imdb_id: imdbId}})
+  if (!movie) {
+    throw new ApiError('No found movie by id', 404)
   }
 
-  return null
+  return movie
+}
+
+export const getRecommendationMovies = async ({
+  imdbId,
+  language = MOVIE_LANGUAGE.EN,
+}: GetMovieById): Promise<Movies> => {
+  const movie = await repositories.movie.findOne({
+    where: { language, imdb_id: imdbId}
+  })
+
+  if (!movie) {
+    throw new ApiError('No found movie by id', 404)
+  }
+
+
+  const themovieRecommendations = await themovieService.getRecommendations({
+    movieId: movie.movie_db_id,
+    language,
+  })
+
+  return movieUpdater({
+    movieIds: themovieRecommendations.results.map((movie) => movie.id),
+    language
+  });
+}
+
+
+export const getSimilarMovies = async ({
+  imdbId,
+  language = MOVIE_LANGUAGE.EN,
+}: GetMovieById): Promise<Movies> => {
+  const movie = await repositories.movie.findOne({
+    where: { language, imdb_id: imdbId}
+  })
+
+  if (!movie) {
+    throw new ApiError('No found movie by id', 404)
+  }
+
+  const themovieSimilar = await themovieService.getRecommendations({
+    movieId: movie.movie_db_id,
+    language,
+  })
+
+  return movieUpdater({
+    movieIds: themovieSimilar.results.map((movie) => movie.id),
+    language
+  });
 }
