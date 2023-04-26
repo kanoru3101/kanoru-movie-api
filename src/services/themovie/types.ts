@@ -91,3 +91,92 @@ export type GenreDB = {
   id: number
   name: string
 }
+
+export type MovieCredits = {
+  id: number,
+  cast: Array<{
+    adult: boolean
+    gender: number | null
+    id: number
+    known_for_department: string
+    name: string
+    original_name: string
+    popularity: number
+    profile_path: string | null
+    cast_id: number
+    character: string
+    credit_id: string
+    order: number
+  }>
+  crew: Array<{
+    adult: boolean
+    gender: number | null
+    id: number
+    known_for_department: string
+    name: string
+    original_name: string
+    popularity: number
+    profile_path: string | null
+    credit_id: string
+    department: string
+    job: string
+  }>
+}
+
+export type PersonMovieCredits = {
+  id: number
+  cast: Array<{
+    character: string
+    credit_id: string
+    release_date: string
+    vote_count: number
+    video: boolean
+    adult: boolean
+    vote_average: number
+    title: string
+    genre_ids: Array<number>
+    original_language: string
+    original_title: string
+    popularity: number
+    id: number
+    backdrop_path: string | null
+    poster_path: string | null
+    overview: string
+  }>
+  crew: Array<{
+    id: number
+    department: string
+    original_language: string
+    original_title: string
+    job: string
+    overview: string
+    vote_count: number
+    video: boolean
+    backdrop_path: string | null
+    poster_path: string | null
+    title: string
+    popularity: number
+    genre_ids: Array<number>
+    adult: boolean
+    vote_average: number
+    release_date: string
+    credit_id: string
+  }>
+}
+
+export type PersonDB = {
+  id: number
+  birthday: string | null
+  deathday: string | null
+  known_for_department: string
+  name: string
+  also_known_as: Array<string>
+  gender: number
+  biography: string
+  popularity: number
+  place_of_birth: string | null
+  profile_path: string | null
+  adult: boolean
+  imdb_id: string
+  homepage: null | string
+}

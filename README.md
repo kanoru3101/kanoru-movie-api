@@ -5,3 +5,8 @@
 
 ## Generate migration
 ```npm run migrate:generate --name=name-changes```
+
+!!!!  **IMPORTANT**  !!!!
+
+Need import like this ```import Movie from "./Movie";``` 
+

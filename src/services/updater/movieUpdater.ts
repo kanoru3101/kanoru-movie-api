@@ -10,7 +10,7 @@ import allSettled from "@utils/allSettled";
 import {In} from "typeorm";
 import moment from "moment";
 
-export type CreateOrUpdateMovieV2 = {
+export type CreateOrUpdateMovie = {
     movie_db_id: number,
     imdb_id: string,
     language: MOVIE_LANGUAGE,
@@ -34,7 +34,7 @@ export type CreateOrUpdateMovieV2 = {
     vote_count: number,
 }
 
-export const createOrUpdateMovieData = async (movieData: CreateOrUpdateMovieV2): Promise<Movie> => {
+export const createOrUpdateMovieData = async (movieData: CreateOrUpdateMovie): Promise<Movie> => {
     const findMovie = await repositories.movie.findOne({ where: { movie_db_id: movieData.movie_db_id, language: movieData.language } });
 
     return await repositories.movie.save({
@@ -63,6 +63,8 @@ export const createOrUpdateMovie = async ({movieId, language }: CreateOrUpdateMo
             })),
         getAllGenres(),
     ])
+
+    console.log("####2.1")
 
     const moviesData = await allSettled(movieDataByLanguages.map(async data => {
         const { isReturn, language, movieData } = data;
@@ -123,6 +125,8 @@ export default async ({movieIds, language, updateAll = false }: { movieIds: numb
     const movieIdsForUpdate = [];
     const movies = await repositories.movie.find({ where: {movie_db_id: In(movieIds), language}, take: 100});
 
+    console.log("####1")
+
     if (updateAll || !movies.length) {
         movieIdsForUpdate.push(...movieIds)
     } else {
@@ -140,7 +144,8 @@ export default async ({movieIds, language, updateAll = false }: { movieIds: numb
             }
         });
     }
-    console.log("######movieIdsForUpdate", movieIdsForUpdate.length)
+
+    console.log("####2")
     const updatedMovie = await allSettled(movieIdsForUpdate.map(movieId => createOrUpdateMovie({movieId, language})))
 
     return [

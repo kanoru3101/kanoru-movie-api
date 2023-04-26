@@ -76,17 +76,18 @@ export const getSimilarMovies = async ({
   language = MOVIE_LANGUAGE.EN,
 }: GetMovieById): Promise<Movies> => {
   const movie = await repositories.movie.findOne({
-    where: { language, imdb_id: imdbId}
+    where: { language, imdb_id: imdbId},
   })
 
   if (!movie) {
     throw new ApiError('No found movie by id', 404)
   }
 
-  const themovieSimilar = await themovieService.getRecommendations({
+  const themovieSimilar = await themovieService.getSimilar({
     movieId: movie.movie_db_id,
     language,
   })
+
 
   return movieUpdater({
     movieIds: themovieSimilar.results.map((movie) => movie.id),

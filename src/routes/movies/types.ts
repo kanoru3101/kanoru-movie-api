@@ -1,5 +1,5 @@
 import { GetMovieByIdResponse } from '@controllers/movies/types'
-import {Movie} from "@models";
+import {Cast, Movie} from "@models";
 
 export type GetMovie = {
   query: void
@@ -34,5 +34,12 @@ export type GetRecommendations = {
   body: void
   params: { imdbId: string }
   response: Movie[]
+}
+
+export type GetMovieCast = {
+  query: void
+  body: void
+  params: { movieImdbId: string }
+  response: Cast[]
 }
 
