@@ -14,14 +14,11 @@ export const getCastByMovieImdbId = async ({
         return []
     }
 
-    console.log("####HERE")
-
     await personUpdater({
         movieTmdbId: movie.movie_db_id,
         language,
     })
 
-    console.log("####HERE2")
     return await castUpdater({
         movieTmdbId: movie.movie_db_id,
         language,

@@ -7,6 +7,7 @@ import Bluebird from 'bluebird'
 import { MOVIE_LANGUAGE } from '@constants'
 import { Cast } from '@models'
 import { MovieCredits } from '@services/themovie/types'
+import {translate} from "@services/translate";
 
 export type CastUpdaterProps = {
   movieTmdbId: number
@@ -18,21 +19,40 @@ export type CreateOrUpdateCastData = {
   castTMDB: MovieCredits['cast'][0]
   movieId: number
   personId: number
+  language: MOVIE_LANGUAGE
 }
 export const createOrUpdateCastData = async ({
   castTMDB,
   movieId,
   personId,
+  language,
 }: CreateOrUpdateCastData): Promise<Cast> => {
-  const findCast = await repositories.cast.findOne({
-        where: { credit_id: castTMDB.credit_id, person: {id: personId}, movie: {id: movieId } },
-      })
+  // const findCast = await repositories.cast.findOne({
+  //       where: { credit_id: castTMDB.credit_id, person: {id: personId}, movie: {id: movieId } },
+  //     })
+  //
+  // const character = await translate({
+  //   sourceLang: MOVIE_LANGUAGE.EN,
+  //   targetLang: language,
+  //   text: castTMDB.character
+  // })
+  const [findCast, character] = await Promise.all([
+    repositories.cast.findOne({
+      where: { credit_id: castTMDB.credit_id, person: {id: personId}, movie: {id: movieId } },
+    }),
+    language === MOVIE_LANGUAGE.EN ? castTMDB.character : translate({
+      sourceLang: MOVIE_LANGUAGE.EN,
+      targetLang: language,
+      text: castTMDB.character
+    })
+  ])
+
 
   const castData = {
     credit_id: castTMDB.credit_id,
     person: personId,
     movie: movieId,
-    character: castTMDB.character,
+    character: character,
     gender: castTMDB.gender,
     popularity: castTMDB.popularity,
     order: castTMDB.order,
@@ -76,7 +96,7 @@ export default async ({
         const castMoment = moment(new Date(findCast.updated_at))
         const nowMoment = moment(new Date())
 
-        if (nowMoment.diff(castMoment, 'days') > 1) {
+        if (nowMoment.diff(castMoment, 'days') > 7) {
           castForUpdate.push(castItemTMDB)
         }
       }
@@ -118,6 +138,7 @@ export default async ({
             castTMDB,
             movieId: movieData.id,
             personId: findPerson.id,
+            language,
           })
         })
       )

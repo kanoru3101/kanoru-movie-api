@@ -1,14 +1,12 @@
-import {
-  getMovieCredits,
-  getPerson,
-} from '@services/themovie'
-import { repositories } from '@services/typeorm'
+import {getMovieCredits, getPerson,} from '@services/themovie'
+import {repositories} from '@services/typeorm'
 import allSettled from '@utils/allSettled'
-import { Person } from '@models'
-import { MOVIE_LANGUAGE } from '@constants'
-import { In } from 'typeorm'
+import {Person} from '@models'
+import {MOVIE_LANGUAGE} from '@constants'
+import {In} from 'typeorm'
 import moment from 'moment'
 import Bluebird from 'bluebird'
+import {translate} from "@services/translate";
 
 export type PersonUpdaterProps =
   | {
@@ -98,16 +96,24 @@ const createOrUpdatePerson = async ({
   const peopleData = await allSettled(
     personDataByLanguages.map(async data => {
       const { isReturn, language, personData } = data
-
+      let personName = personData.name;
       if (!personData.imdb_id) {
         return { isReturn: false, language }
+      }
+
+      if (language !== MOVIE_LANGUAGE.EN) {
+        personName = await translate({
+          sourceLang: MOVIE_LANGUAGE.EN,
+          targetLang: language,
+          text: personName
+        })
       }
 
       const inputData = {
         tmdb_id: personData.id,
         imdb_id: personData.imdb_id,
         language,
-        name: personData.name,
+        name: personName,
         biography: personData.biography,
         gender: personData.gender,
         popularity: personData.popularity,
