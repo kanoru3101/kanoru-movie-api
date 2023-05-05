@@ -10,6 +10,11 @@ export const getPersonByImdb = async ({
 }: getByImdb): Promise<Person> => {
   const person = await repositories.person.findOne({
     where: { language, imdb_id: imdbId },
+    relations: {
+      cast: {
+        movie: true
+      }
+    }
   })
   if (!person) {
     throw new ApiError('No found person by id', 404)

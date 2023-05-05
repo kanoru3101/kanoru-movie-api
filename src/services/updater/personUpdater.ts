@@ -97,16 +97,27 @@ const createOrUpdatePerson = async ({
     personDataByLanguages.map(async data => {
       const { isReturn, language, personData } = data
       let personName = personData.name;
+      let placeOfBirth = personData.place_of_birth;
       if (!personData.imdb_id) {
         return { isReturn: false, language }
       }
 
       if (language !== MOVIE_LANGUAGE.EN) {
-        personName = await translate({
-          sourceLang: MOVIE_LANGUAGE.EN,
-          targetLang: language,
-          text: personName
-        })
+        const [translatedPersonName, translatedPlaceOfBirth] = await Promise.all([
+          translate({
+            sourceLang: MOVIE_LANGUAGE.EN,
+            targetLang: language,
+            text: personName
+          }),
+          placeOfBirth ? translate({
+            sourceLang: MOVIE_LANGUAGE.EN,
+            targetLang: language,
+            text: placeOfBirth
+          }) : null
+        ])
+
+        personName = translatedPersonName;
+        placeOfBirth = translatedPlaceOfBirth;
       }
 
       const inputData = {
@@ -115,9 +126,12 @@ const createOrUpdatePerson = async ({
         language,
         name: personName,
         biography: personData.biography,
+        birthday: personData?.birthday,
+        deathday: personData?.deathday,
+        known_for_department: personData.known_for_department,
         gender: personData.gender,
         popularity: personData.popularity,
-        place_of_birth: personData.place_of_birth,
+        place_of_birth:  personData.place_of_birth,
         adult: personData.adult,
         profile_path:
           personData?.profile_path &&

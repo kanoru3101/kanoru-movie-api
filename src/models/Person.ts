@@ -33,6 +33,12 @@ class Person extends BaseEntity {
     @Column({ type: 'varchar', nullable: false })
     biography: string
 
+    @Column({ type: 'varchar', nullable: true})
+    birthday: string | null
+
+    @Column({ type: 'varchar', nullable: true})
+    deathday: string | null
+
     @Column({ type: 'integer', default: 0 })
     gender: number
 
@@ -50,6 +56,9 @@ class Person extends BaseEntity {
 
     @Column({ type: 'varchar', nullable: true })
     homepage: string | null
+
+    @Column({ type: 'varchar'})
+    known_for_department?: string
 
     @Column({ type: 'text', array: true, default: [] })
     also_known_as: string[]
