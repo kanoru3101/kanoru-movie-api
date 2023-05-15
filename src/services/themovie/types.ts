@@ -17,7 +17,7 @@ export type MovieDB = {
   homepage: string
   id: number
   imdb_id: string
-  original_language: string
+  original_language: MOVIE_LANGUAGE
   original_title: string
   overview: string
   popularity: number
@@ -90,6 +90,29 @@ export type MovieListResultObject = {
 export type GenreDB = {
   id: number
   name: string
+}
+
+export type Credit = {
+  credit_type: 'cast' | 'crew',
+  department: string,
+  job: string,
+  media: {
+    id: number,
+    name: string
+    original_name: string,
+    character: string,
+    episodes: Array<{
+      air_date: string,
+      poster_path: string,
+      season_number: string,
+    }>
+  }
+  media_type: 'movie' | 'tv'
+  id: string,
+  person: {
+    name: string,
+    id: number
+  }
 }
 
 export type MovieCredits = {

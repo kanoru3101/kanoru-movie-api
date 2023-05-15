@@ -20,7 +20,13 @@ export const translate = async ({
   targetLang,
   text,
 }: Translate): Promise<string> => {
+  if (!text) {
+    return ''
+  }
 
+  if (sourceLang === targetLang) {
+    return text
+  }
   return await translateApi({
     url: generateParams({
       sourceLang,

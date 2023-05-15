@@ -6,6 +6,9 @@ import {MOVIE_LANGUAGE} from "@constants";
 export type CreateOrUpdateMovieProps = {
     movieId: number
     language: MOVIE_LANGUAGE
+    useOriginMovie?: boolean
+    tinyErrors?: boolean
+    isReturnAll?: boolean
 }
 
 export type GetMovieGenresProps = {

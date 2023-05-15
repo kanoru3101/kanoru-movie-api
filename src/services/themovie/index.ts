@@ -3,10 +3,13 @@ import getTopRateMovies from './getTopRateMovies'
 import getTrending from './getTrending'
 import getNowPlaying from './getNowPlaying'
 import getRecommendations from './getRecommendations'
-import getSimilar from '@services/themovie/getSimilar'
-import getMovieCredits from '@services/themovie/getMovieCredits'
-import getPerson from "@services/themovie/getPerson";
-import getPersonMoviesCredits from "@services/themovie/getPersonMoviesCredits";
+import getSimilar from './getSimilar'
+import getMovieCredits from './getMovieCredits'
+import getPerson from "./getPerson";
+import getPersonMoviesCredits from "./getPersonMoviesCredits";
+import getMovieChangeList from './getMovieChangeList'
+import getPersonChangeList from './getPersonChangeList'
+import getCredit from './getCredit'
 
 export {
   getMovie,
@@ -17,5 +20,8 @@ export {
   getSimilar,
   getMovieCredits,
   getPerson,
-  getPersonMoviesCredits
+  getPersonMoviesCredits,
+  getMovieChangeList,
+  getPersonChangeList,
+  getCredit
 }

@@ -4,7 +4,7 @@ import axios from 'axios'
 
 const instance = axios.create({
   baseURL: 'https://translate.googleapis.com/',
-  timeout: 5000,
+  timeout: 10000,
 })
 
 const translateApi = async ({ url }: { url: string }) => {

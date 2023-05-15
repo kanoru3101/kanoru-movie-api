@@ -27,15 +27,6 @@ export const createOrUpdateCastData = async ({
   personId,
   language,
 }: CreateOrUpdateCastData): Promise<Cast> => {
-  // const findCast = await repositories.cast.findOne({
-  //       where: { credit_id: castTMDB.credit_id, person: {id: personId}, movie: {id: movieId } },
-  //     })
-  //
-  // const character = await translate({
-  //   sourceLang: MOVIE_LANGUAGE.EN,
-  //   targetLang: language,
-  //   text: castTMDB.character
-  // })
   const [findCast, character] = await Promise.all([
     repositories.cast.findOne({
       where: { credit_id: castTMDB.credit_id, person: {id: personId}, movie: {id: movieId } },
