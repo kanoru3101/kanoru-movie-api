@@ -1,14 +1,13 @@
-import {getMovieCredits, getPerson,} from '@services/themovie'
-import {repositories} from '@services/typeorm'
+import { getMovieCredits, getPerson } from '@services/themovie'
+import { repositories } from '@services/typeorm'
 import allSettled from '@utils/allSettled'
-import {Person} from '@models'
-import {MOVIE_LANGUAGE} from '@constants'
-import {In} from 'typeorm'
+import { Person } from '@models'
+import { MOVIE_LANGUAGE } from '@constants'
+import { In } from 'typeorm'
 import moment from 'moment'
 import Bluebird from 'bluebird'
-import {translate} from "@services/translate";
-import {MovieDB, PersonDB} from "@services/themovie/types";
-import {chooseData, chooseDataForTranslate} from "@utils/chooseData";
+import { PersonDB } from '@services/themovie/types'
+import { chooseData, chooseDataForTranslate } from '@utils/chooseData'
 
 export type PersonUpdaterProps =
   | {
@@ -67,16 +66,16 @@ export const createOrUpdatePersonData = async (
 }
 
 export const generateInputDataForPerson = async ({
-                                                   personTMDB,
+  personTMDB,
   originPerson,
   language,
-                                                   isUseOriginal
-                                                 }: {
-  personTMDB: PersonDB,
+  isUseOriginal,
+}: {
+  personTMDB: PersonDB
   originPerson: PersonDB | null
-  language: MOVIE_LANGUAGE,
+  language: MOVIE_LANGUAGE
   isUseOriginal: boolean
-}) => {
+}): Promise<Person> => {
   const chooseDataWrapper = <T>(mainText: T, secondaryText?: T): T =>
     chooseData(isUseOriginal, mainText, secondaryText)
 
@@ -98,7 +97,11 @@ export const generateInputDataForPerson = async ({
     language: language,
     name: await chooseDataForTranslateWrapper(personTMDB.name),
     biography:
-      personTMDB.biography || await chooseDataForTranslateWrapper(personTMDB.biography, originPerson?.biography),
+      personTMDB.biography ||
+      (await chooseDataForTranslateWrapper(
+        personTMDB.biography,
+        originPerson?.biography
+      )),
     birthday: personTMDB?.birthday,
     deathday: personTMDB?.deathday,
     known_for_department: personTMDB.known_for_department,
@@ -113,8 +116,11 @@ export const generateInputDataForPerson = async ({
       personTMDB?.profile_path &&
       `https://image.tmdb.org/t/p/original${personTMDB.profile_path}`,
     homepage: chooseDataWrapper(personTMDB.homepage, originPerson?.homepage),
-    also_known_as: chooseDataWrapper(personTMDB.also_known_as, originPerson?.also_known_as)
-  }
+    also_known_as: chooseDataWrapper(
+      personTMDB.also_known_as,
+      originPerson?.also_known_as
+    ),
+  } as unknown as Person
 }
 
 const getPersonTMDBIds = async ({
@@ -134,8 +140,14 @@ const getPersonTMDBIds = async ({
   return []
 }
 
-export const findPersonByOriginalLanguageTMDB = (personDataByLanguages: Array<{language: MOVIE_LANGUAGE, personTMDB: PersonDB | null}>, useOriginPerson: boolean): {
-  data: PersonDB | null,
+export const findPersonByOriginalLanguageTMDB = (
+  personDataByLanguages: Array<{
+    language: MOVIE_LANGUAGE
+    personTMDB: PersonDB | null
+  }>,
+  useOriginPerson: boolean
+): {
+  data: PersonDB | null
   isUseOriginal: boolean
 } => {
   const findPerson = personDataByLanguages.find(
@@ -147,14 +159,14 @@ export const findPersonByOriginalLanguageTMDB = (personDataByLanguages: Array<{l
 
   return {
     data: originalPersonData,
-    isUseOriginal: !!findPerson
+    isUseOriginal: !!findPerson,
   }
 }
 
 const createOrUpdatePerson = async ({
   personTMDBId,
   language,
-  useOriginPerson = true
+  useOriginPerson = true,
 }: CreateOrUpdatePerson): Promise<Person | null> => {
   const personDataByLanguages = await Bluebird.mapSeries(
     [MOVIE_LANGUAGE.EN, MOVIE_LANGUAGE.UA],
@@ -165,7 +177,8 @@ const createOrUpdatePerson = async ({
     })
   )
 
-  const {data: originPersonData, isUseOriginal} = findPersonByOriginalLanguageTMDB(personDataByLanguages, useOriginPerson)
+  const { data: originPersonData, isUseOriginal } =
+    findPersonByOriginalLanguageTMDB(personDataByLanguages, useOriginPerson)
 
   const peopleData = await allSettled(
     personDataByLanguages.map(async data => {
@@ -179,7 +192,7 @@ const createOrUpdatePerson = async ({
         personTMDB: personTMDB,
         originPerson: originPersonData,
         language,
-        isUseOriginal
+        isUseOriginal,
       })
 
       const { id } = await createOrUpdatePersonData(inputPersonData)

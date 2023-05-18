@@ -1,6 +1,6 @@
 import {MOVIE_LANGUAGE} from "@constants";
 
-export type getByImdb = {
+export type GetByImdb = {
     imdbId: string,
     language: MOVIE_LANGUAGE
 }

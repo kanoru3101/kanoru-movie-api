@@ -20,7 +20,16 @@ import {
 import { Genre } from '@models'
 import { repositories } from '@services/typeorm'
 import { createOrUpdateCastData } from '@services/updater/castUpdater'
-import {getArg, getData, getDate, getMovieIdsForUpdates, isNeedToUpdate, languages} from "./helpers";
+import {
+  getArg,
+  getData,
+  getDate,
+  GetMovieData,
+  getMovieIdsForUpdates,
+  GetPersonData,
+  isNeedToUpdate,
+  languages
+} from "./helpers";
 import {In} from "typeorm";
 
 type UpdatedStats = {
@@ -42,7 +51,8 @@ const updatedStats = {
 const argv = getArg;
 
 const startDate = getDate(argv.startDate);
-const endDate = getDate(argv.startDate);
+const endDate = getDate(argv.endDate);
+
 
 const personProcess = async ({
   tmdbId,
@@ -57,6 +67,7 @@ const personProcess = async ({
     existPerson: await repositories.person.findOne({ where: {tmdb_id: tmdbId, language: lng}}),
     language: lng,
   }))
+  await new Promise(resolve => setTimeout(resolve, 200))
 
   const {data: originPersonData, isUseOriginal} = findPersonByOriginalLanguageTMDB(peopleDataTMDB, true)
 
@@ -99,72 +110,6 @@ const personProcess = async ({
   }>
 }
 
-// const peopleProcess = async ({
-//                                peopleIds,
-//                              }: {
-//   peopleIds: Array<number>
-// }): Promise<{
-//   data: Array<{
-//     id: number
-//     tmdbId: number
-//     lng: MOVIE_LANGUAGE
-//   }>
-//   stats: {
-//     processed: number
-//     en: number
-//     ua: number
-//     isUpdated: number
-//   }
-// }> => {
-//   const peopleStats = {
-//     processed: 0,
-//     en: 0,
-//     ua: 0,
-//     isUpdated: 0,
-//   }
-//
-//   const peopleData = await Bluebird.mapSeries(
-//     _.chunk(peopleIds, 5),
-//     async peopleIds => {
-//       const results = await allSettled(
-//         peopleIds.map(async id => {
-//           console.log(`#PERSON ID: ${id}`)
-//           const personData = await personProcess({ tmdbId: id })
-//           return personData.flat()
-//         })
-//       )
-//
-//       await new Promise(resolve => setTimeout(resolve, 200))
-//
-//       peopleStats.processed += results.length
-//       peopleStats.en += results
-//         .flat()
-//         .filter(({ lng }) => lng === MOVIE_LANGUAGE.EN).length
-//
-//       peopleStats.ua += results
-//         .flat()
-//         .filter(({ lng }) => lng === MOVIE_LANGUAGE.UA).length
-//
-//       const updatedPerson = results
-//         .flat()
-//         .filter(({ isUpdated }) => isUpdated)
-//         .map(({ id }) => id)
-//
-//       peopleStats.isUpdated += [...new Set(updatedPerson)].length
-//
-//       return results.flat().map(({ id, lng, tmdbId }) => ({
-//         id,
-//         tmdbId,
-//         lng,
-//       }))
-//     }
-//   )
-//
-//   return {
-//     data: peopleData.flat(),
-//     stats: peopleStats,
-//   }
-// }
 const castProcess = async ({
   movieCastTMDB,
   moviesData
@@ -275,9 +220,11 @@ export const movieProcess = async ({
 }
 
 const mainProcess = async (movieTmdbId: number) => {
-  const { allGenres, movieCastTMDB, moviesTMDBData } = await getData({
+  const data = await getData({
     movieTmdbId,
-  })
+  }) as GetMovieData
+
+  const { allGenres, movieCastTMDB, moviesTMDBData } = data
   console.log(`#MOVIE ID: ${movieTmdbId}`)
   const moviesData = await movieProcess({
     allGenres,
@@ -293,14 +240,13 @@ const mainProcess = async (movieTmdbId: number) => {
 
 const doit = async (): Promise<void> => {
   console.log('START WORK....')
-  const movieIds = await getMovieIdsForUpdates(startDate, endDate)
+  const movieIds = await getMovieIdsForUpdates('movie', startDate, endDate)
   const movieIdsLength = movieIds.length
 
   if (movieIdsLength) {
     await Bluebird.mapSeries(movieIds, async (id, index) => {
       await mainProcess(id)
-      await new Promise(resolve => setTimeout(resolve, 50))
-      console.log("########## RESULTS")
+      await new Promise(resolve => setTimeout(resolve, 100))
       console.log(`########## RESULTS"
         progress: ${index + 1}/${movieIdsLength},
         movies: ${[...new Set(updatedStats.movies)].length}
