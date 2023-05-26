@@ -1,11 +1,15 @@
 /* eslint-disable no-console */
 import connectDB from '@config/ormconfig'
 import {
+  createWorker,
   getArg,
   getData,
   getDate,
   getMovieIdsForUpdates,
   GetPersonData,
+  printStats,
+  updatedStatsState,
+  updateWorkerStats,
 } from './helpers'
 import Bluebird from 'bluebird'
 
@@ -15,27 +19,19 @@ import {
   generateInputDataForPerson,
 } from '@services/updater/personUpdater'
 import allSettled from '@utils/allSettled'
-import { MOVIE_LANGUAGE } from '@constants'
+import { MOVIE_LANGUAGE, WORKER_NAME, WORKER_STATUS } from '@constants'
 import { personCastUpdater } from '@services/updater'
+import { repositories } from '@services/typeorm'
+import { Worker } from '@models'
 
-type UpdatedStats = {
-  movies: Array<number>
-  people: Array<number>
-  cast: Array<string>
-  videos: Array<number>
-}
-
-const updatedStats = {
-  movies: [],
-  people: [],
-  cast: [],
-  videos: [],
-} as UpdatedStats
+const updatedStats = { ...updatedStatsState }
 
 const argv = getArg
 
 const startDate = getDate(argv.startDate)
 const endDate = getDate(argv.endDate)
+const startFrom = Number(argv.startFrom)
+const workerId = argv.workerId
 
 export const personProcess = async ({
   peopleTMDBData,
@@ -109,15 +105,34 @@ const mainProcess = async (personTmdbId: number) => {
   })
 }
 
-const doit = async (): Promise<void> => {
+const doit = async (workerData: Worker): Promise<void> => {
   console.log('START WORK....')
+
   const movieIds = await getMovieIdsForUpdates('person', startDate, endDate)
   const movieIdsLength = movieIds.length
 
   if (movieIdsLength) {
     await Bluebird.mapSeries(movieIds, async (id, index) => {
+      if (startFrom > index) {
+        return
+      }
+
       await mainProcess(id)
       await new Promise(resolve => setTimeout(resolve, 100))
+
+      await updateWorkerStats({
+        previousWorkerData: workerData,
+        stats: updatedStats,
+        totalLength: movieIdsLength,
+        currentIndex: index,
+      })
+
+      printStats({
+        currentIndex: index,
+        stats: updatedStats,
+        totalLength: movieIdsLength,
+      })
+
       console.log(`########## RESULTS"
         progress: ${index + 1}/${movieIdsLength},
         movies: ${[...new Set(updatedStats.movies)].length}
@@ -130,13 +145,43 @@ const doit = async (): Promise<void> => {
 }
 
 Promise.resolve()
-console.log(process.argv)
 connectDB
   .initialize()
   .then(() => {
     console.log(`Data Source has been initialized`)
   })
-  .then(doit)
+  .then(() =>
+    createWorker({
+      workerId,
+      name: WORKER_NAME.UPDATE_PEOPLE,
+      startAt: startDate,
+      finishAt: endDate,
+    })
+  )
+  .then(async workerData => {
+    try {
+      await doit(workerData)
+      await repositories.worker.update(
+        {
+          id: workerData.id,
+        },
+        {
+          status: WORKER_STATUS.FINISHED,
+        }
+      )
+    } catch (err: any) {
+      console.log(err?.stack || err)
+      await repositories.worker.update(
+        {
+          id: workerData.id,
+        },
+        {
+          status: WORKER_STATUS.FAILED,
+        }
+      )
+      process.exit(1)
+    }
+  })
   .catch(err => {
     console.log(err?.stack || err)
     process.exit(1)

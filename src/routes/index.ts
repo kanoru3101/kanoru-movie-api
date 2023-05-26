@@ -4,6 +4,7 @@ import moviesRouter from './movies'
 import authRouter from './auth'
 import usersRoute from './users'
 import peopleRoute from './people'
+import searchRoute from './search'
 
 const router = Router()
 
@@ -12,5 +13,6 @@ router.use('/movies', moviesRouter)
 router.use('/auth', authRouter)
 router.use('/users', usersRoute)
 router.use('/people', peopleRoute)
+router.use('/search', searchRoute)
 
 export default router

@@ -8,6 +8,7 @@ import moment from 'moment'
 import Bluebird from 'bluebird'
 import { PersonDB } from '@services/themovie/types'
 import { chooseData, chooseDataForTranslate } from '@utils/chooseData'
+import {sortItemsByIds} from "@utils/sortResultsByIds";
 
 export type PersonUpdaterProps =
   | {
@@ -96,12 +97,10 @@ export const generateInputDataForPerson = async ({
     imdb_id: personTMDB.imdb_id,
     language: language,
     name: await chooseDataForTranslateWrapper(personTMDB.name),
-    biography:
-      personTMDB.biography ||
-      (await chooseDataForTranslateWrapper(
+    biography: await chooseDataForTranslateWrapper(
         personTMDB.biography,
         originPerson?.biography
-      )),
+      ),
     birthday: personTMDB?.birthday,
     deathday: personTMDB?.deathday,
     known_for_department: personTMDB.known_for_department,
@@ -258,8 +257,14 @@ export default async ({
     )
   )
 
-  return [
+  const results = [
     ...people,
     ...updatedPeople.filter((person): person is Person => person !== null),
   ]
+
+  return sortItemsByIds(
+    personTMDBIds,
+    results,
+    (person) => person.tmdb_id
+  )
 }

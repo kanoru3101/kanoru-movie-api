@@ -1,75 +1,63 @@
 /* eslint-disable no-console */
-import {
-  getPerson,
-} from '@services/themovie'
+import { getPerson } from '@services/themovie'
 import allSettled from '@utils/allSettled'
-import { MOVIE_LANGUAGE } from '@constants'
+import { MOVIE_LANGUAGE, WORKER_NAME, WORKER_STATUS } from '@constants'
 import Bluebird from 'bluebird'
-import { MovieCredits, MovieDB, } from '@services/themovie/types'
+import { MovieCredits, MovieDB } from '@services/themovie/types'
 import connectDB from '@config/ormconfig'
 import {
   createOrUpdatePersonData,
   findPersonByOriginalLanguageTMDB,
-  generateInputDataForPerson
+  generateInputDataForPerson,
 } from '@services/updater/personUpdater'
 import {
   createOrUpdateMovieData,
   findMovieByOriginalLanguageTMDB,
   generateInputDataForMovie,
 } from '@services/updater/movieUpdater'
-import { Genre } from '@models'
+import { Genre, Worker } from '@models'
 import { repositories } from '@services/typeorm'
 import { createOrUpdateCastData } from '@services/updater/castUpdater'
 import {
+  createWorker,
   getArg,
   getData,
   getDate,
   GetMovieData,
   getMovieIdsForUpdates,
-  GetPersonData,
   isNeedToUpdate,
-  languages
-} from "./helpers";
-import {In} from "typeorm";
+  languages, printStats, updatedStatsState, updateWorkerStats,
+} from './helpers'
+import { In } from 'typeorm'
 
-type UpdatedStats = {
-  movies: Array<number>
-  people: Array<number>
-  cast: Array<string>
-  videos: Array<number>
-  peopleFromCast: Array<number>
-}
+const updatedStats = { ...updatedStatsState }
 
-const updatedStats = {
-  movies: [],
-  people: [],
-  cast: [],
-  videos: [],
-  peopleFromCast: []
-} as UpdatedStats
+const argv = getArg
 
-const argv = getArg;
-
-const startDate = getDate(argv.startDate);
-const endDate = getDate(argv.endDate);
-
+const startDate = getDate(argv.startDate)
+const endDate = getDate(argv.endDate)
+const startFrom = Number(argv.startFrom)
+const workerId = argv.workerId
 
 const personProcess = async ({
   tmdbId,
- }: {
+}: {
   tmdbId: number
   updateAll?: boolean
 }): Promise<
-  Array<{ id: number; language: MOVIE_LANGUAGE; tmdbId: number}>
+  Array<{ id: number; language: MOVIE_LANGUAGE; tmdbId: number }>
 > => {
   const peopleDataTMDB = await Bluebird.mapSeries(languages, async lng => ({
     personTMDB: await getPerson({ personId: tmdbId, language: lng }),
-    existPerson: await repositories.person.findOne({ where: {tmdb_id: tmdbId, language: lng}}),
+    existPerson: await repositories.person.findOne({
+      where: { tmdb_id: tmdbId, language: lng },
+    }),
     language: lng,
   }))
   await new Promise(resolve => setTimeout(resolve, 200))
 
-  const {data: originPersonData, isUseOriginal} = findPersonByOriginalLanguageTMDB(peopleDataTMDB, true)
+  const { data: originPersonData, isUseOriginal } =
+    findPersonByOriginalLanguageTMDB(peopleDataTMDB, true)
 
   if (!originPersonData) {
     return []
@@ -84,14 +72,19 @@ const personProcess = async ({
       const isNeed = isNeedToUpdate({ ...existPerson })
 
       if (!isNeed) {
-        return { id: existPerson?.id, language: language, tmdbId, isUpdated: false }
+        return {
+          id: existPerson?.id,
+          language: language,
+          tmdbId,
+          isUpdated: false,
+        }
       }
 
       const inputPersonData = await generateInputDataForPerson({
         personTMDB: personTMDB,
         originPerson: originPersonData,
         language,
-        isUseOriginal
+        isUseOriginal,
       })
 
       const { id } = await createOrUpdatePersonData(inputPersonData)
@@ -112,45 +105,59 @@ const personProcess = async ({
 
 const castProcess = async ({
   movieCastTMDB,
-  moviesData
+  moviesData,
 }: {
   movieCastTMDB: MovieCredits | null
-  moviesData: Array<{id: number, lng: MOVIE_LANGUAGE, tmdbId: number}>
+  moviesData: Array<{ id: number; lng: MOVIE_LANGUAGE; tmdbId: number }>
 }): Promise<void> => {
-  const cast = movieCastTMDB?.cast || [];
+  const cast = movieCastTMDB?.cast || []
 
-  const creditIds = cast.map((item) => item.credit_id);
+  const creditIds = cast.map(item => item.credit_id)
 
   const credits = await repositories.cast.find({
     take: 10000,
     where: {
-      credit_id: In(creditIds)
-    }
+      credit_id: In(creditIds),
+    },
   })
 
-  await Bluebird.mapSeries(cast, async (castItem) => {
-    const getPeopleForCast = async (): Promise<Array<{id: number, language: MOVIE_LANGUAGE}>> => {
-      const findPersonCredit = credits.filter(i => castItem.id === i?.person?.tmdb_id);
+  await Bluebird.mapSeries(cast, async castItem => {
+    const getPeopleForCast = async (): Promise<
+      Array<{ id: number; language: MOVIE_LANGUAGE }>
+    > => {
+      const findPersonCredit = credits.filter(
+        i => castItem.id === i?.person?.tmdb_id
+      )
 
       if (findPersonCredit.length === moviesData.length) {
-          return findPersonCredit.map((cast) => ({id: cast.person.id, language: cast.person.language}));
+        return findPersonCredit.map(cast => ({
+          id: cast.person.id,
+          language: cast.person.language,
+        }))
       }
 
       console.log(`##ADDING People with TMDB ID ${castItem.id}`)
       const createdPeople = await personProcess({
-        tmdbId: castItem.id
-      });
+        tmdbId: castItem.id,
+      })
 
-      return createdPeople.map((person) => ({ id: person.id, language: person.language}))
+      return createdPeople.map(person => ({
+        id: person.id,
+        language: person.language,
+      }))
     }
 
-    const findPeople = await getPeopleForCast();
+    const findPeople = await getPeopleForCast()
 
-    await Bluebird.mapSeries((moviesData || []), async (movieData) => {
-      const findCast = credits.find((i) => castItem.credit_id === i.credit_id && movieData.id === i?.movie?.id)
+    await Bluebird.mapSeries(moviesData || [], async movieData => {
+      const findCast = credits.find(
+        i => castItem.credit_id === i.credit_id && movieData.id === i?.movie?.id
+      )
 
-      if (isNeedToUpdate({...findCast, diffTimeAtDays:7 })) {
-        const findPersonIdByLanguage = findPeople.find((person) => person.language === movieData.lng )?.id;
+      if (isNeedToUpdate({ ...findCast, diffTimeAtDays: 7 })) {
+        const findPersonIdByLanguage = findPeople.find(
+          person => person.language === movieData.lng
+        )?.id
 
         if (findPersonIdByLanguage) {
           const { credit_id } = await createOrUpdateCastData({
@@ -220,9 +227,9 @@ export const movieProcess = async ({
 }
 
 const mainProcess = async (movieTmdbId: number) => {
-  const data = await getData({
+  const data = (await getData({
     movieTmdbId,
-  }) as GetMovieData
+  })) as GetMovieData
 
   const { allGenres, movieCastTMDB, moviesTMDBData } = data
   console.log(`#MOVIE ID: ${movieTmdbId}`)
@@ -233,40 +240,75 @@ const mainProcess = async (movieTmdbId: number) => {
 
   await castProcess({
     moviesData,
-    movieCastTMDB
+    movieCastTMDB,
   })
-
 }
 
-const doit = async (): Promise<void> => {
+const doit = async (workerData: Worker): Promise<void> => {
   console.log('START WORK....')
+
   const movieIds = await getMovieIdsForUpdates('movie', startDate, endDate)
   const movieIdsLength = movieIds.length
 
   if (movieIdsLength) {
     await Bluebird.mapSeries(movieIds, async (id, index) => {
+      if (startFrom > index) {
+        return
+      }
+
       await mainProcess(id)
       await new Promise(resolve => setTimeout(resolve, 100))
-      console.log(`########## RESULTS"
-        progress: ${index + 1}/${movieIdsLength},
-        movies: ${[...new Set(updatedStats.movies)].length}
-        videos: ${[...new Set(updatedStats.videos)].length}
-        people: ${[...new Set(updatedStats.people)].length}
-        cast: ${[...new Set(updatedStats.cast)].length}
-      `)
+      await updateWorkerStats({
+        previousWorkerData: workerData,
+        stats: updatedStats,
+        totalLength: movieIdsLength,
+        currentIndex: index
+      })
+
+      printStats({
+        currentIndex: index,
+        stats: updatedStats,
+        totalLength: movieIdsLength,
+      })
     })
   }
 }
 
 Promise.resolve()
-console.log(process.argv)
 connectDB
   .initialize()
   .then(() => {
     console.log(`Data Source has been initialized`)
   })
-  .then(doit)
-  .catch(err => {
+  .then(() =>
+    createWorker({
+      workerId,
+      name: WORKER_NAME.UPDATE_MOVIES,
+      startAt: startDate,
+      finishAt: endDate,
+    })
+  )
+  .then(async workerData => {
+    try {
+      await doit(workerData)
+      await repositories.worker.update({
+          id: workerData.id
+        },
+        {
+          status: WORKER_STATUS.FINISHED,
+        })
+    } catch (err: any) {
+      console.log(err?.stack || err)
+      await repositories.worker.update({
+        id: workerData.id
+        },
+        {
+        status: WORKER_STATUS.FAILED,
+      })
+      process.exit(1)
+    }
+  })
+  .catch(async err => {
     console.log(err?.stack || err)
     process.exit(1)
   })

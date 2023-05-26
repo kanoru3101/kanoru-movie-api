@@ -8,3 +8,4 @@ export const genre = dataSource.getRepository(models.Genre);
 export const video = dataSource.getRepository(models.Video);
 export const person = dataSource.getRepository(models.Person);
 export const cast = dataSource.getRepository(models.Cast);
+export const worker = dataSource.getRepository(models.Worker);

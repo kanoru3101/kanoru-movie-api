@@ -16,6 +16,7 @@ import moment from 'moment'
 import { chooseData, chooseDataForTranslate } from '@utils/chooseData'
 import withTryCatch from '@utils/withTryCatch'
 import { MovieDB } from '@services/themovie/types'
+import {sortItemsByIds} from "@utils/sortResultsByIds";
 
 export type CreateOrUpdateMovie = {
   movie_db_id: number
@@ -133,13 +134,18 @@ export const generateInputDataForMovie = async ({
 
   const chooseDataForTranslateWrapper = async (
     mainText: string,
-    secondaryText?: string | null
-  ) => {
+    secondaryText?: string | null,
+  ): Promise<string> => {
     const options = {
       isUseOriginal,
       originalLanguage: originalMovieData?.original_language,
       language,
     }
+
+    if (mainText && mainText != "") {
+      return mainText
+    }
+
     return await chooseDataForTranslate(options, mainText, secondaryText)
   }
 
@@ -300,7 +306,7 @@ export default async ({
         const movieMoment = moment(new Date(movie.updated_at))
         const nowMoment = moment(new Date())
 
-        if (nowMoment.diff(movieMoment, 'days') > 1) {
+        if (nowMoment.diff(movieMoment, 'days') > 5) {
           movieIdsForUpdate.push(movieId)
         }
       }
@@ -311,8 +317,14 @@ export default async ({
     movieIdsForUpdate.map(movieId => createOrUpdateMovie({ movieId, language }))
   )
 
-  return [
+  const results = [
     ...movies,
     ...updatedMovie.filter((movie): movie is Movie => movie !== null),
   ]
+
+  return sortItemsByIds(
+    movieIds,
+    results,
+    (movie) => movie.movie_db_id
+  )
 }

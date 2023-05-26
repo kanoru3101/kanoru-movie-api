@@ -7,6 +7,14 @@ type Translate = {
   text: string
 }
 
+const convertToCorrectCountryName = (lng: string): MOVIE_LANGUAGE => {
+  const languageMapping: Record<string, string> = {
+    'wo': 'wol'
+  }
+
+  return (languageMapping[lng] || lng) as MOVIE_LANGUAGE;
+}
+
 const generateParams = ({
   sourceLang,
   targetLang,
@@ -27,9 +35,11 @@ export const translate = async ({
   if (sourceLang === targetLang) {
     return text
   }
+
+
   return await translateApi({
     url: generateParams({
-      sourceLang,
+      sourceLang: convertToCorrectCountryName(sourceLang),
       targetLang,
       text
     }),
