@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import * as movieController from '@controllers/movies'
-import {GetMovie, GetNowPlaying, GetRecommendations, GetTopRate, GetTrending} from './types'
+import * as castController from '@controllers/cast'
+import {GetMovie, GetMovieCast, GetNowPlaying, GetRecommendations, GetTopRate, GetTrending} from './types'
 import {routeHandler, TypeHandler} from '@utils'
 
 const router = Router()
@@ -49,6 +50,15 @@ router.get('/:imdbId/similar', routeHandler(async (req: TypeHandler<GetRecommend
   })
 
   res.status(200).json(similarMovies)
+}));
+
+router.get('/:movieImdbId/cast', routeHandler(async (req: TypeHandler<GetMovieCast>, res) => {
+    const cast = await castController.getCastByMovieImdbId({
+        movieImdbId: req.params.movieImdbId,
+        language: req.movieLanguage,
+    })
+
+    res.status(200).json(cast)
 }));
 
 export default router

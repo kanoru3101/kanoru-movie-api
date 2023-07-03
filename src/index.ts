@@ -7,6 +7,7 @@ import connectDB from './config/ormconfig'
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import './http-extensions'
+import {cronMovieChanges, cronPeopleChanges} from "./workers";
 
 dotenv.config()
 
@@ -31,6 +32,10 @@ connectDB
 const PORT = (process.env.PORT || 8080) as number
 const HOST = process.env.HOST || '0.0.0.0'
 const app: Express = express()
+
+
+cronMovieChanges
+cronPeopleChanges
 
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}))
 app.use(cookieParser())

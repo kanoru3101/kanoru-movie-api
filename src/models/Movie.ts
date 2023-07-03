@@ -11,6 +11,7 @@ import {
 } from 'typeorm'
 import Genre from "./Genre";
 import Video from "./Video";
+import Cast from "./Cast";
 
 @Entity({
   name: 'movie',
@@ -95,6 +96,9 @@ class Movie extends BaseEntity {
 
   @OneToMany(() => Video, (video) => video.movie, { cascade: true, eager: true, onUpdate: "CASCADE", onDelete: "CASCADE"})
   videos: Video[];
+
+  @OneToMany(() => Cast, (cast) => cast.movie)
+  cast: Cast[]
 }
 
 export default Movie

@@ -10,9 +10,11 @@ const allSettled = async <T>(promises: T[]): Promise<Array<Awaited<T>>> => {
             errors.push(settle.reason)
         }
     })
-    // TODO: Add saving error on some handler
-    // eslint-disable-next-line no-console
-    console.error("###ERROR", errors)
+    if (errors.length > 0) {
+        // TODO: Add saving error on some handler
+        // eslint-disable-next-line no-console
+        console.error("###ERROR", errors)
+    }
     return values;
 }
 
