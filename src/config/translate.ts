@@ -10,7 +10,7 @@ const instance = axios.create({
 const translateApi = async ({ url }: { url: string }) => {
   try {
     const { data } = await instance.get(url)
-    return data[0][0][0]
+    return data[0]?.map((i: any[]) => i[0]).join(' ') || ''
   } catch (error) {
     console.log('###ERROR_TRANSLATE_API', error)
     if (axios.isAxiosError(error)) {

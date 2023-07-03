@@ -15,29 +15,43 @@ export type CastUpdaterProps = {
   updateAll?: boolean
 }
 
+export type UpdateCast = {
+  adult: boolean
+  gender: number | null
+  known_for_department: string
+  popularity: number
+  cast_id: number | null
+  character: string
+  credit_id: string
+  order: number
+}
+
 export type CreateOrUpdateCastData = {
-  castTMDB: MovieCredits['cast'][0]
+  castTMDB: UpdateCast
   movieId: number
   personId: number
   language: MOVIE_LANGUAGE
+  movieLanguage?: MOVIE_LANGUAGE
+  options?: { reload?: boolean }
 }
 export const createOrUpdateCastData = async ({
   castTMDB,
   movieId,
   personId,
   language,
+  movieLanguage,
+  options = {}
 }: CreateOrUpdateCastData): Promise<Cast> => {
   const [findCast, character] = await Promise.all([
     repositories.cast.findOne({
       where: { credit_id: castTMDB.credit_id, person: {id: personId}, movie: {id: movieId } },
     }),
-    language === MOVIE_LANGUAGE.EN ? castTMDB.character : translate({
-      sourceLang: MOVIE_LANGUAGE.EN,
+    (movieLanguage === MOVIE_LANGUAGE.EN && language === MOVIE_LANGUAGE.EN) ? castTMDB.character : translate({
+      sourceLang: 'auto',
       targetLang: language,
       text: castTMDB.character
     })
   ])
-
 
   const castData = {
     credit_id: castTMDB.credit_id,
@@ -48,14 +62,13 @@ export const createOrUpdateCastData = async ({
     popularity: castTMDB.popularity,
     order: castTMDB.order,
     adult: castTMDB.adult,
-    known_for_department: castTMDB.known_for_department,
-    cast_id: castTMDB.cast_id,
+    known_for_department: castTMDB.known_for_department
   } as unknown as Cast
 
   return await repositories.cast.save({
     ...findCast,
     ...castData,
-  })
+  }, options)
 }
 
 export default async ({

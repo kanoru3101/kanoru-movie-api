@@ -10,6 +10,11 @@ import getPersonMoviesCredits from "./getPersonMoviesCredits";
 import getMovieChangeList from './getMovieChangeList'
 import getPersonChangeList from './getPersonChangeList'
 import getCredit from './getCredit'
+import getMultiSearch from './getMultiSearch'
+import getMoviesSearch from './getMoviesSearch'
+import getPeopleSearch from './getPeopleSearch'
+import uploadTMDBFile from './uploadFileTmdb'
+import getPersonCombinedCredits from './getPersonCombinedCredits'
 
 export {
   getMovie,
@@ -23,5 +28,10 @@ export {
   getPersonMoviesCredits,
   getMovieChangeList,
   getPersonChangeList,
-  getCredit
+  getCredit,
+  getMultiSearch,
+  getMoviesSearch,
+  getPeopleSearch,
+  uploadTMDBFile,
+  getPersonCombinedCredits
 }

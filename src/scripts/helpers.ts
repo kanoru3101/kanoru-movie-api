@@ -5,6 +5,7 @@ import {
   getMovieCredits,
   getPerson,
   getPersonChangeList,
+  getPersonCombinedCredits,
   getPersonMoviesCredits,
 } from '@services/themovie'
 import { Genre, Worker } from '@models'
@@ -13,6 +14,7 @@ import {
   MovieDB,
   PersonDB,
   PersonMovieCredits,
+  CombinedCredits
 } from '@services/themovie/types'
 import { MOVIE_LANGUAGE, WORKER_NAME, WORKER_STATUS } from '@constants'
 import withTryCatch from '@utils/withTryCatch'
@@ -22,7 +24,7 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import moment from 'moment/moment'
 import { repositories } from '@services/typeorm'
-
+import {Presets, SingleBar } from 'cli-progress'
 export const languages = [MOVIE_LANGUAGE.EN, MOVIE_LANGUAGE.UA]
 
 export type UpdatedStats = {
@@ -31,6 +33,7 @@ export type UpdatedStats = {
   cast: Array<string>
   videos: Array<number>
   peopleFromCast: Array<number>
+  errors: Array<any>
 }
 
 export const updatedStatsState = {
@@ -39,6 +42,7 @@ export const updatedStatsState = {
   cast: [],
   videos: [],
   peopleFromCast: [],
+  errors: []
 } as UpdatedStats
 
 export const getArg = yargs(hideBin(process.argv))
@@ -50,13 +54,16 @@ export const getArg = yargs(hideBin(process.argv))
   .alias('e', 'endDate')
   .alias('f', 'startFrom')
   .alias('w', 'workerId')
+  .alias('n', 'numberWorkers')
   .default('startDate', moment().subtract(1, 'day').toString())
   .default('endDate', moment().toString())
   .default('startFrom', '0')
+  .default('numberWorkers', '1')
   .default('workerId', null).argv as {
   startDate: string
   endDate: string
   startFrom: string
+  numberWorkers: string
   workerId?: number | null
 }
 
@@ -80,6 +87,15 @@ export const isNeedToUpdate = ({
 
   return true
 }
+
+export const progressBar = new SingleBar(
+  {
+    format: `[{bar}] {percentage}% | ETA: {eta} | {value}/{total} | movies:{movies} | videos:{videos} | people:{people} | cast:{cast}`,
+    barCompleteChar: '\u2588',
+    barIncompleteChar: '\u2591',
+  },
+  Presets.shades_grey
+)
 
 export const getMovieIdsForUpdates = async (
   type: 'movie' | 'person',
@@ -145,6 +161,7 @@ type PersonDataResult = {
     language: MOVIE_LANGUAGE
   }>
   personCast: PersonMovieCredits | null
+  personCombinedCredits: CombinedCredits | null
 }
 
 export type GetMovieData = MovieDataResult & {
@@ -162,6 +179,7 @@ export const getData = async ({
   getMovieData = true,
   getMovieCastData = true,
   getPersonMoviesData = true,
+  getPersonCombinedCreditsData = false
 }: {
   movieTmdbId?: number
   personTmdbId?: number
@@ -169,12 +187,14 @@ export const getData = async ({
   getMovieData?: boolean
   getMovieCastData?: boolean
   getPersonMoviesData?: boolean
+  getPersonCombinedCreditsData?: boolean
 }): Promise<GetMovieData | GetPersonData | void> => {
   const wrappedGetAllGenres = withTryCatch(getAllGenres, [])
   const wrappedGetMovieCredits = withTryCatch(getMovieCredits, null)
   const wrappedGetMovie = withTryCatch(getMovie, null)
   const wrappedGetPerson = withTryCatch(getPerson, null)
   const wrapperPersonCredits = withTryCatch(getPersonMoviesCredits, null)
+  const wrapperPersonCombinedCredits = withTryCatch(getPersonCombinedCredits, null)
 
   if (movieTmdbId !== undefined) {
     const [allGenres, movieCastTMDB, moviesTMDBData] = await Promise.all([
@@ -199,7 +219,7 @@ export const getData = async ({
   }
 
   if (personTmdbId !== undefined) {
-    const [peopleTMDBData, personCast] = await Promise.all([
+    const [peopleTMDBData, personCast, personCombinedCredits] = await Promise.all([
       await Bluebird.mapSeries(languages, async lng => ({
         personTMDB: getMovieData
           ? await wrappedGetPerson({ personId: personTmdbId, language: lng })
@@ -209,11 +229,15 @@ export const getData = async ({
       getPersonMoviesData
         ? await wrapperPersonCredits({ personId: personTmdbId })
         : null,
+      getPersonCombinedCreditsData ? await  wrapperPersonCombinedCredits({
+        personId: personTmdbId
+      }): null
     ])
 
     return {
       peopleTMDBData,
       personCast,
+      personCombinedCredits,
       movieTMDB: undefined,
     }
   }

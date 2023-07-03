@@ -8,6 +8,8 @@ import {execSync} from 'child_process'
 const typeToScriptMapping = {
   [WORKER_NAME.UPDATE_PEOPLE]: 'getUpdatesPerson',
   [WORKER_NAME.UPDATE_MOVIES]: 'getUpdatesMovie',
+  [WORKER_NAME.DAILY_TMDB_MOVIES]: 'dailyTmdbMovies',
+  [WORKER_NAME.DAILY_TMDB_PEOPLE]: 'dailyTmdbPeople'
 };
 
 const tmdbChanges = async (workerName: WORKER_NAME): Promise<any> => {
@@ -49,5 +51,29 @@ const tmdbChanges = async (workerName: WORKER_NAME): Promise<any> => {
   }
 }
 
+const dailyTMDB = async (workerName: WORKER_NAME): Promise<any> => {
+  const now = moment()
+  const currentDate = now.format('YYYY-MM-DD')
+  const scriptName = typeToScriptMapping[workerName]
+
+  const events = await repositories.worker.find({
+    where: {
+      name: workerName,
+      started_at: currentDate,
+    },
+    order: { id: 'DESC' },
+  })
+
+  if (events?.length === 0) {
+    return execSync(
+      `npx ts-node src/scripts/${scriptName}.ts --startDate="${currentDate}" --endDate="${currentDate}"`,
+      { stdio: 'inherit' }
+    )
+  }
+
+}
+
 export const cronMovieChanges = cron.schedule('0 */2 * * *', async () => tmdbChanges(WORKER_NAME.UPDATE_MOVIES))
 export const cronPeopleChanges = cron.schedule('1-23/2 * * * *', async () => tmdbChanges(WORKER_NAME.UPDATE_PEOPLE))
+
+//export const cronDailyTMDBMovies = cron.schedule('20 * * * * *', async () => dailyTMDB(WORKER_NAME.DAILY_TMDB_MOVIES))

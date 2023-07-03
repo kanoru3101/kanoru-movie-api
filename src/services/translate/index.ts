@@ -2,7 +2,7 @@ import {MOVIE_LANGUAGE} from '@constants'
 import translateApi from '@config/translate'
 
 type Translate = {
-  sourceLang: MOVIE_LANGUAGE
+  sourceLang: MOVIE_LANGUAGE | 'auto'
   targetLang: MOVIE_LANGUAGE
   text: string
 }

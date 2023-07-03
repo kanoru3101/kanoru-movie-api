@@ -38,9 +38,6 @@ class Cast extends BaseEntity {
     @Column({ type: 'varchar' })
     known_for_department: string
 
-    @Column({ type: 'integer'})
-    cast_id: number
-
     @CreateDateColumn({ type: "timestamp", default: () => "current_timestamp" })
     public created_at: Date;
 

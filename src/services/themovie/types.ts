@@ -115,6 +115,50 @@ export type Credit = {
   }
 }
 
+export type CombinedCredits = {
+  id: number
+  cast: Array<{
+    adult: boolean
+    backdrop_path?: string
+    genre_ids: Array<number>
+    id: number
+    original_language: MOVIE_LANGUAGE
+    original_title: string
+    overview: string
+    popularity: number
+    poster_path?: string
+    release_date: string
+    title: string
+    video: boolean
+    vote_average: number
+    vote_count: number
+    character: string
+    credit_id: string
+    order: number
+    media_type: 'movie' | 'tv'
+  }>
+  crew: Array<{
+    adult: boolean
+    backdrop_path?: string
+    genre_ids: Array<number>
+    id: number
+    original_language: MOVIE_LANGUAGE
+    original_title: string
+    overview: string
+    popularity: number
+    poster_path?: string
+    release_date: string
+    title: string
+    video: boolean
+    vote_average: number
+    vote_count: number
+    credit_id: string
+    department: string
+    job: string
+    media_type: "movie" | 'tv'
+  }>,
+}
+
 export type MovieCredits = {
   id: number,
   cast: Array<{
@@ -165,6 +209,7 @@ export type PersonMovieCredits = {
     backdrop_path: string | null
     poster_path: string | null
     overview: string
+    order: number
   }>
   crew: Array<{
     id: number
@@ -202,4 +247,27 @@ export type PersonDB = {
   adult: boolean
   imdb_id: string
   homepage: null | string
+}
+
+export type MultiSearch = {
+  page: number
+  total_pages: number
+  total_results: number
+  results: Array<{
+    adult: boolean
+    backdrop_path: string
+    id: number
+    title: string
+    original_language: string
+    original_title: string
+    overview: string
+    poster_path: string
+    genre_ids: Array<number>
+    popularity: number
+    release_date: string
+    video: boolean
+    vote_average: number
+    vote_count: number
+    media_type: 'movie' | 'tv' | 'person'
+  }>
 }

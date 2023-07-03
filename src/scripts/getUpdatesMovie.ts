@@ -26,7 +26,10 @@ import {
   GetMovieData,
   getMovieIdsForUpdates,
   isNeedToUpdate,
-  languages, printStats, updatedStatsState, updateWorkerStats,
+  languages,
+  printStats,
+  updatedStatsState,
+  updateWorkerStats,
 } from './helpers'
 import { In } from 'typeorm'
 
@@ -176,7 +179,7 @@ const castProcess = async ({
   })
 }
 
-export const movieProcess = async ({
+const movieProcess = async ({
   allGenres,
   moviesTMDBData,
 }: {
