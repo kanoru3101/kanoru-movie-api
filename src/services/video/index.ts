@@ -11,11 +11,11 @@ export const saveOrUpdateVideos = async ({ movies }: SaveOrUpdateVideos): Promis
 
     const videoDbIds = videos.map(video => video.id)
 
-    const videosFromDB = await repositories.video.find({ where: { movie_db_id: In(videoDbIds) }, take: 100})
+    const videosFromDB = await repositories.video.find({ where: { tmdb_id: In(videoDbIds) }, take: 100})
 
     const videosData = videos.map((video) => {
         const data = {
-            movie_db_id: video.id,
+            tmdb_id: video.id,
             language: video.iso_639_1,
             name: video.name,
             site: video.site,
@@ -25,7 +25,7 @@ export const saveOrUpdateVideos = async ({ movies }: SaveOrUpdateVideos): Promis
             official: video.official,
             published_at: video.published_at,
         }
-        const foundVideo = videosFromDB.find(videoDB => videoDB.movie_db_id === video.id) || null;
+        const foundVideo = videosFromDB.find(videoDB => videoDB.tmdb_id === video.id) || null;
 
         if (foundVideo) {
             return {...data, id: foundVideo.id}

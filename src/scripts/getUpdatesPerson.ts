@@ -85,7 +85,7 @@ const castProcess = async ({
       addNewMovies: true,
     })
 
-    updatedStats.movies.push(...result.map(data => data.movie.movie_db_id))
+    updatedStats.movies.push(...result.map(data => data.movie.tmdb_id))
     updatedStats.cast.push(...result.map(data => data.credit_id))
   })
 }

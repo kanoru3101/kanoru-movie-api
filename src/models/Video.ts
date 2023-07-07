@@ -18,7 +18,7 @@ class Video extends BaseEntity {
     id: number
 
     @Column({type: 'varchar'})
-    movie_db_id: string
+    tmdb_id: string
 
     @Column({type: 'varchar'})
     language: MOVIE_LANGUAGE

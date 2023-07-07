@@ -106,7 +106,7 @@ const castProcess = async ({
     await repositories.movie.find({
       take: 10000,
       where: {
-        movie_db_id: In(movieTmdbIds)
+        tmdb_id: In(movieTmdbIds)
       }
     })
   ])
@@ -119,7 +119,7 @@ const castProcess = async ({
       const findCast = credits.find((c) => castItem.credit_id === c.credit_id && personData.id === c?.person?.id)
 
       if (isNeedToUpdate({...findCast, diffTimeAtDays: 7})) {
-        const movie = movies.find((movie) => movie.movie_db_id === castItem.id && personData.lng === movie.language)
+        const movie = movies.find((movie) => movie.tmdb_id === castItem.id && personData.lng === movie.language)
 
         if (!movie) {
           return;

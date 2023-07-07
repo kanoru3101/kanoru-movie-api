@@ -13,11 +13,11 @@ export default async (): Promise<void> => {
 
     const result = genresData.map(({language, genres}) => {
         return genres.map(genre => ({
-            movie_db_id: genre.id,
+            tmdb_id: genre.id,
             language: language,
             name: genre.name,
         }))
     }).flat()
 
-    await repositories.genre.upsert(result, ['movie_db_id', 'language'])
+    await repositories.genre.upsert(result, ['tmdb_id', 'language'])
 }

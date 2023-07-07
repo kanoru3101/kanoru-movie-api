@@ -74,7 +74,7 @@ export const getSearch = async ({
   const [movies, people] = await Promise.all([
     await repositories.movie.find({
       where: {
-        movie_db_id: In(moviesTMDBIds),
+        tmdb_id: In(moviesTMDBIds),
         language,
       },
       relations: {
@@ -103,7 +103,7 @@ export const getSearch = async ({
     total_pages: data.total_pages,
     total_results: data.total_results,
     data: {
-      movies: sortItemsByIds(moviesTMDBIds, movies, movie => movie.movie_db_id),
+      movies: sortItemsByIds(moviesTMDBIds, movies, movie => movie.tmdb_id),
       people: sortItemsByIds(peopleTMDBIds, people, movie => movie.tmdb_id),
     },
   }
