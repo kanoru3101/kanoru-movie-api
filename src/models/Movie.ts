@@ -1,4 +1,4 @@
-import {MOVIE_LANGUAGE, MOVIE_STATUSES} from '@constants/index'
+import {MOVIE_LANGUAGE, MOVIE_STATUSES} from '@constants'
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -16,7 +16,7 @@ import Cast from "./Cast";
 @Entity({
   name: 'movie',
 })
-@Unique(['language', 'movie_db_id', 'imdb_id'])
+@Unique(['language', 'tmdb_id', 'imdb_id'])
 class Movie extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
@@ -25,7 +25,7 @@ class Movie extends BaseEntity {
   language: MOVIE_LANGUAGE
 
   @Column({ type: 'integer'})
-  movie_db_id: number
+  tmdb_id: number
 
   @Column({ type: 'varchar' })
   imdb_id: string

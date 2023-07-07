@@ -14,7 +14,7 @@ import {MOVIE_LANGUAGE} from "@constants";
 @Entity({
   name: 'genre',
 })
-@Unique(['language', 'movie_db_id'])
+@Unique(['language', 'tmdb_id'])
 @Unique(['language', 'name'])
 class Genre extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -24,7 +24,7 @@ class Genre extends BaseEntity {
   language: MOVIE_LANGUAGE
 
   @Column({ type: 'integer' })
-  movie_db_id: number
+  tmdb_id: number
 
   @Column({ type: 'varchar' })
   name: string

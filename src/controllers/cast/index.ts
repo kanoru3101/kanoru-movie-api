@@ -15,12 +15,12 @@ export const getCastByMovieImdbId = async ({
     }
 
     await personUpdater({
-        movieTmdbId: movie.movie_db_id,
+        movieTmdbId: movie.tmdb_id,
         language,
     })
 
     return await castUpdater({
-        movieTmdbId: movie.movie_db_id,
+        movieTmdbId: movie.tmdb_id,
         language,
     })
 }

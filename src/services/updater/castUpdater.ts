@@ -80,7 +80,7 @@ export default async ({
 
   const [cast, movieCredits] = await Promise.all([
     repositories.cast.find({
-      where: { movie: { movie_db_id: movieTmdbId, language } },
+      where: { movie: { tmdb_id: movieTmdbId, language } },
       take: 1000,
     }),
     getMovieCredits({ movieId: movieTmdbId }),
@@ -115,7 +115,7 @@ export default async ({
       isReturn: lng === language,
       language: lng,
       movieData: await repositories.movie.findOne({
-        where: { movie_db_id: movieTmdbId, language: lng },
+        where: { tmdb_id: movieTmdbId, language: lng },
       }),
       peopleData: await repositories.person.find({
         where: { tmdb_id: In(personTMDBIds), language: lng },
@@ -152,7 +152,7 @@ export default async ({
   )
 
   return await repositories.cast.find({
-    where: { movie: { movie_db_id: movieTmdbId, language } },
+    where: { movie: { tmdb_id: movieTmdbId, language } },
     take: 1000,
     order: {
       order: "ASC"

@@ -140,7 +140,7 @@ export default async ({
         where: { tmdb_id: personTmdbId, language: lng}
       }),
       moviesData: await repositories.movie.find({
-        where: { movie_db_id: In(movieTMDBIds), language: lng},
+        where: { tmdb_id: In(movieTMDBIds), language: lng},
         take: 1000
       })
     })
@@ -156,7 +156,7 @@ export default async ({
       await allSettled(
         castForUpdate.map(async (castTMDB) => {
           let findMovie = moviesData.find(
-            movie => movie.movie_db_id === castTMDB.id
+            movie => movie.tmdb_id === castTMDB.id
           )
 
           if (addNewMovies && !findMovie) {
@@ -171,7 +171,7 @@ export default async ({
             findMovie = createdMovie[0]
           }
 
-          const findCast = movieCreditData.find(movieCast => movieCast.movieId === findMovie?.movie_db_id)?.data || null
+          const findCast = movieCreditData.find(movieCast => movieCast.movieId === findMovie?.tmdb_id)?.data || null
 
           if (!findMovie || !personData?.id || !movieCreditData || !findCast) return null
 

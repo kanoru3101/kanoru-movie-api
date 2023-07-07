@@ -60,7 +60,7 @@ export const getRecommendationMovies = async ({
 
 
   const themovieRecommendations = await themovieService.getRecommendations({
-    movieId: movie.movie_db_id,
+    movieId: movie.tmdb_id,
     language,
   })
 
@@ -84,7 +84,7 @@ export const getSimilarMovies = async ({
   }
 
   const themovieSimilar = await themovieService.getSimilar({
-    movieId: movie.movie_db_id,
+    movieId: movie.tmdb_id,
     language,
   })
 

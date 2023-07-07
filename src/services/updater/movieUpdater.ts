@@ -19,7 +19,7 @@ import { MovieDB } from '@services/themovie/types'
 import {sortItemsByIds} from "@utils/sortResultsByIds";
 
 export type CreateOrUpdateMovie = {
-  movie_db_id: number
+  tmdb_id: number
   imdb_id: string
   language: MOVIE_LANGUAGE
   title: string
@@ -46,7 +46,7 @@ export const createOrUpdateMovieData = async (
   movieData: CreateOrUpdateMovie
 ): Promise<Movie> => {
   const findMovie = await repositories.movie.findOne({
-    where: { movie_db_id: movieData.movie_db_id, language: movieData.language },
+    where: { tmdb_id: movieData.tmdb_id, language: movieData.language },
   })
 
   return await repositories.movie.save({
@@ -65,7 +65,7 @@ export const getMovieGenres = ({
       genreData =>
         allGenres.find(
           genre =>
-            genreData.id === genre.movie_db_id && genre.language === language
+            genreData.id === genre.tmdb_id && genre.language === language
         )?.id || null
     )
     .filter(Boolean) as number[]
@@ -154,7 +154,7 @@ export const generateInputDataForMovie = async ({
   })
 
   return {
-    movie_db_id: movieId,
+    tmdb_id: movieId,
     imdb_id: movieData.imdb_id,
     language,
     title: await chooseDataForTranslateWrapper(
@@ -291,7 +291,7 @@ export default async ({
 }): Promise<Movie[]> => {
   const movieIdsForUpdate = []
   const movies = await repositories.movie.find({
-    where: { movie_db_id: In(movieIds), language },
+    where: { tmdb_id: In(movieIds), language },
     take: 100,
   })
 
@@ -299,7 +299,7 @@ export default async ({
     movieIdsForUpdate.push(...movieIds)
   } else {
     movieIds.forEach(movieId => {
-      const movie = movies.find(movie => movie.movie_db_id === movieId)
+      const movie = movies.find(movie => movie.tmdb_id === movieId)
       if (!movie) {
         movieIdsForUpdate.push(movieId)
       } else {
@@ -325,6 +325,6 @@ export default async ({
   return sortItemsByIds(
     movieIds,
     results,
-    (movie) => movie.movie_db_id
+    (movie) => movie.tmdb_id
   )
 }
