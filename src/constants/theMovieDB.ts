@@ -24,3 +24,4 @@ export enum MOVIE_VIDEO_TYPE {
   BLOOPERS = 'Bloopers',
   RECAP = 'Recap'
 }
+

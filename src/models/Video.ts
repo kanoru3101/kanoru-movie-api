@@ -9,6 +9,9 @@ import {
 } from 'typeorm'
 import Movie from './Movie'
 import {MOVIE_LANGUAGE, MOVIE_VIDEO_TYPE} from "@constants";
+import TV from "./TV";
+import TVSeason from "./TVSeason";
+import TVEpisode from "./TVEpisode";
 
 @Entity({
     name: 'video',
@@ -52,6 +55,15 @@ class Video extends BaseEntity {
 
     @ManyToOne(() => Movie, (movie) => movie.videos)
     movie: Movie
+
+    @ManyToOne(() => TV, (tv) => tv.videos)
+    tv: TV
+
+    @ManyToOne(() => TVSeason, (tvSeason) => tvSeason.videos)
+    tv_season: TVSeason
+
+    @ManyToOne(() => TVEpisode, (tvEpisode) => tvEpisode.videos)
+    tv_episode: TVEpisode
 }
 
 export default Video

@@ -9,3 +9,6 @@ export const video = dataSource.getRepository(models.Video);
 export const person = dataSource.getRepository(models.Person);
 export const cast = dataSource.getRepository(models.Cast);
 export const worker = dataSource.getRepository(models.Worker);
+export const tv = dataSource.getRepository(models.TV);
+export const tvSeason = dataSource.getRepository(models.TVSeason);
+export const tvEpisode = dataSource.getRepository(models.TVEpisode);

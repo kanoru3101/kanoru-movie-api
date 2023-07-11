@@ -6,10 +6,12 @@ import {
   ManyToMany,
   JoinTable,
   CreateDateColumn,
-  UpdateDateColumn, Unique
+  UpdateDateColumn,
+  Unique
 } from 'typeorm'
 import Movie from './Movie'
 import {MOVIE_LANGUAGE} from "@constants";
+import TV from "./TV";
 
 @Entity({
   name: 'genre',
@@ -38,6 +40,10 @@ class Genre extends BaseEntity {
   @ManyToMany(() => Movie, (movie) => movie.genres)
   @JoinTable()
   movies: Movie[]
+
+  @ManyToMany(() => TV, (tv) => tv.genres)
+  @JoinTable()
+  tvs: TV[]
 }
 
 export default Genre
