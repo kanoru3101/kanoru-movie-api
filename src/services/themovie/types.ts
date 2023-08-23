@@ -297,6 +297,7 @@ export type CastDB = {
   popularity: number
   profile_path: string | null
   name: string
+  order: number
 }
 
 export type MovieCredits = {
