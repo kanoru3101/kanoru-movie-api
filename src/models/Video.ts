@@ -5,7 +5,7 @@ import {
     BaseEntity,
     ManyToOne,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn, Unique
 } from 'typeorm'
 import Movie from './Movie'
 import {MOVIE_LANGUAGE, MOVIE_VIDEO_TYPE} from "@constants";
@@ -16,11 +16,12 @@ import TVEpisode from "./TVEpisode";
 @Entity({
     name: 'video',
 })
+@Unique(['tmdb_id', "movie.id", "tv_season.id", 'tv_episode.id'])
 class Video extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({type: 'varchar'})
+    @Column({type: 'varchar', unique: true})
     tmdb_id: string
 
     @Column({type: 'varchar'})
@@ -32,7 +33,7 @@ class Video extends BaseEntity {
     @Column({type: 'varchar'})
     site: string
 
-    @Column({type: 'varchar', unique: true})
+    @Column({type: 'varchar' })
     key: string
 
     @Column({type: 'varchar'})

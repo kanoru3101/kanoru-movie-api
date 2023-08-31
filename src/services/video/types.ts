@@ -1,5 +1,5 @@
-import {MovieDB} from "@services/themovie/types";
+import {MovieDB, TvDB, TvEpisodeDB, TvSeasonDB} from "@services/themovie/types";
 
 export type SaveOrUpdateVideos = {
-    movies: MovieDB[]
+    data: TvDB[] | TvSeasonDB[] | TvEpisodeDB[] | MovieDB[]
 }

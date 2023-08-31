@@ -139,6 +139,7 @@ export type TvSeasonDB = {
   id: number
   poster_path?: string
   season_number: number
+  vote_average: number
   videos?: {
     results: Array<VideoDB>,
   }
@@ -180,7 +181,32 @@ export type TheMoviePagination = {
   page: number,
   total_results: number,
   total_pages: number,
-  results: MovieListResultObject[],
+  results: Array<MovieListResultObject>,
+}
+
+export type TheTVPagination = {
+  page: number,
+  total_results: number,
+  total_pages: number,
+  results: Array<TvListResultObject>,
+}
+
+export type TvListResultObject = {
+  adult: boolean
+  backdrop_path: string | null
+  id: number
+  name: string
+  original_title: string
+  original_language: string
+  overview: string
+  poster_path: string | null
+  media_type: string
+  genre_ids: Array<number>
+  popularity: number
+  first_air_date: string | null
+  vote_count: number
+  vote_average: number
+  origin_country: Array<string>
 }
 
 export type MovieListResultObject = {
@@ -188,7 +214,7 @@ export type MovieListResultObject = {
   adult: boolean
   overview: string
   release_date: string
-  genre_ids: number[],
+  genre_ids: Array<number>,
   id: number,
   original_title: string
   original_language: string

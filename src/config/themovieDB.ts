@@ -13,6 +13,7 @@ type ThemoviedbProps = {
   params?: { [key: string]: number | string | undefined }
   appendToResponse?: string[]
 }
+type RetryFunction<T> = () => Promise<T>;
 
 type BuildQueryParams = { [key: string]: number | string | undefined }
 
@@ -41,29 +42,86 @@ const buildAppendToResponse = (values: Array<string>): string => {
   return `&append_to_response=${_.join(values, ',')}`
 }
 
-const themovieDB = async({
+const MAX_RETRY_ATTEMPTS = 3;
+
+const attemptWrapper = async <T>(fn: RetryFunction<T>): Promise<T> => {
+  let retryAttempts = 0;
+
+  const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
+  while (retryAttempts < MAX_RETRY_ATTEMPTS) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 429) {
+        retryAttempts++;
+        if (retryAttempts < MAX_RETRY_ATTEMPTS) {
+          console.log(`Rate limit exceeded. Retrying in 1 second (attempt ${retryAttempts})`);
+          await sleep(1000);
+        } else {
+          throw new Error('Max retry attempts reached. Rate limit still exceeded.');
+        }
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  throw new Error('Max retry attempts reached without success.');
+};
+
+const themovieDB = async ({
   url,
   language = 'en',
   params,
   appendToResponse,
 }: ThemoviedbProps): Promise<any> => {
-  try {
-    const additionalParams = params ? buildQueryParams(params) : ''
-    const appendToResponseParams = buildAppendToResponse(appendToResponse || [])
+  const fetchFunction = async () => {
+    const additionalParams = params ? buildQueryParams(params) : '';
+    const appendToResponseParams = buildAppendToResponse(appendToResponse || []);
     const { data } = await instance.get(
       `${url}?language=${language}&api_key=${THEMOVIE_API_KEY}${appendToResponseParams}${additionalParams}`
-    )
+    );
+    return data;
+  };
 
-    return data
+  try {
+    return await attemptWrapper(fetchFunction);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.log('error message: ', error.message)
-      throw new ApiError(error.message)
+      console.log('error message:', error.message);
+      throw new ApiError(error.message);
     } else {
-      console.log('unexpected error: ', error)
-      throw new ApiError('An unexpected error occurred')
+      console.log('unexpected error:', error);
+      throw new ApiError('An unexpected error occurred');
     }
   }
-}
+};
+
+// const themovieDB = async({
+//   url,
+//   language = 'en',
+//   params,
+//   appendToResponse,
+// }: ThemoviedbProps): Promise<any> => {
+//   try {
+//     const additionalParams = params ? buildQueryParams(params) : ''
+//     const appendToResponseParams = buildAppendToResponse(appendToResponse || [])
+//     const { data } = await instance.get(
+//       `${url}?language=${language}&api_key=${THEMOVIE_API_KEY}${appendToResponseParams}${additionalParams}`
+//     )
+//
+//     return data
+//   } catch (error) {
+//     if (axios.isAxiosError(error)) {
+//       console.log('error message: ', error.message)
+//       throw new ApiError(error.message)
+//     } else {
+//       console.log('unexpected error: ', error)
+//       throw new ApiError('An unexpected error occurred')
+//     }
+//   }
+// }
+
 
 export default themovieDB

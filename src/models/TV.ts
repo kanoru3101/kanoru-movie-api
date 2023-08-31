@@ -16,6 +16,8 @@ import TVSeason from "./TVSeason";
   name: 'tv',
 })
 @Unique(['language', 'tmdb_id', 'imdb_id'])
+@Unique(['tmdb_id', 'language'])
+@Unique(['imdb_id', 'language'])
 class TV extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number

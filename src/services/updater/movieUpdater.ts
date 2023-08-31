@@ -1,14 +1,12 @@
 import {
   CreateOrUpdateMovieProps,
-  GetMovieGenresProps,
-  GetMovieGenresResponse,
-} from '@services/movie/types'
+} from '@services/updater/types'
 import { getMovie } from '@services/themovie'
 import Bluebird from 'bluebird'
 import { MOVIE_LANGUAGE, MOVIE_STATUSES } from '@constants'
 import { repositories } from '@services/typeorm'
 import { Genre, Movie } from '@models'
-import { getAllGenres } from '@services/genre'
+import {getAllGenres, getGenresForRelations} from '@services/genre'
 import { saveOrUpdateVideos } from '@services/video'
 import allSettled from '@utils/allSettled'
 import { In } from 'typeorm'
@@ -55,23 +53,23 @@ export const createOrUpdateMovieData = async (
   })
 }
 
-export const getMovieGenres = ({
-  allGenres,
-  genres,
-  language,
-}: GetMovieGenresProps): GetMovieGenresResponse => {
-  const movieGenres = genres
-    .map(
-      genreData =>
-        allGenres.find(
-          genre =>
-            genreData.id === genre.tmdb_id && genre.language === language
-        )?.id || null
-    )
-    .filter(Boolean) as number[]
-
-  return movieGenres.map(id => ({ id }))
-}
+// export const getMovieGenres = ({
+//   allGenres,
+//   genres,
+//   language,
+// }: GetMovieGenresProps): GetMovieGenresResponse => {
+//   const movieGenres = genres
+//     .map(
+//       genreData =>
+//         allGenres.find(
+//           genre =>
+//             genreData.id === genre.tmdb_id && genre.language === language
+//         )?.id || null
+//     )
+//     .filter(Boolean) as number[]
+//
+//   return movieGenres.map(id => ({ id }))
+// }
 
 export const fetchMoviesData = async ({
   movieId,
@@ -80,7 +78,6 @@ export const fetchMoviesData = async ({
 }: {
   movieId: number
   language: MOVIE_LANGUAGE
-  useOriginMovie?: boolean
   tinyErrors?: boolean
 }): Promise<{
   movieDataByLanguages: Array<{
@@ -150,7 +147,7 @@ export const generateInputDataForMovie = async ({
   }
 
   const videos = await saveOrUpdateVideos({
-    movies: [movieData],
+    data: [movieData],
   })
 
   return {
@@ -206,7 +203,7 @@ export const generateInputDataForMovie = async ({
       movieData.vote_count,
       originalMovieData?.vote_count
     ),
-    genres: getMovieGenres({
+    genres: getGenresForRelations({
       allGenres: allGenres,
       genres: movieData.genres,
       language,

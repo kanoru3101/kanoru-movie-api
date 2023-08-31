@@ -1,5 +1,5 @@
 import themovieDB from '@config/themovieDB'
-import {TVSeasonExternalIdsTMDB} from './types'
+import {TVSeasonExternalIdsTMDB} from '../types'
 
 export type GetTVSeasonExternalIds = {
   tvId: number

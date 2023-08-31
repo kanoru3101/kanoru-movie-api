@@ -14,7 +14,7 @@ import TVEpisode from "./TVEpisode";
 @Entity({
   name: 'tv_season',
 })
-@Unique(['language', 'tmdb_id'])
+@Unique(['language', 'tmdb_id', 'season_number'])
 class TVSeason extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
@@ -35,7 +35,13 @@ class TVSeason extends BaseEntity {
   poster_path?: string
 
   @Column({ type: 'integer', default: 0 })
-  season_number?: number
+  season_number: number
+
+  @Column({ type: 'varchar', nullable: true})
+  air_date?: string
+
+  @Column({ type: 'real' })
+  vote_average?: number
 
   @CreateDateColumn({ type: "timestamp", default: () => "current_timestamp" })
   public created_at: Date;

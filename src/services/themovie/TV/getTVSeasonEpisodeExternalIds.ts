@@ -2,12 +2,12 @@ import themovieDB from '@config/themovieDB'
 import {
   TVSeasonEpisodeExternalIdsTMDB,
   TVSeasonExternalIdsTMDB,
-} from './types'
+} from '../types'
 
 export type GetTVSeasonEpisodeExternalIds = {
   tvId: number
-  season_number: number
-  episode_number: number
+  seasonNumber: number
+  episodeNumber: number
 }
 
 export type GetTVSeasonEpisodeExternalIdsResponse =
@@ -15,11 +15,11 @@ export type GetTVSeasonEpisodeExternalIdsResponse =
 
 const getTVSeasonEpisodeExternalIds = async ({
   tvId,
-  season_number,
-  episode_number,
+  seasonNumber,
+  episodeNumber,
 }: GetTVSeasonEpisodeExternalIds): Promise<GetTVSeasonEpisodeExternalIdsResponse> => {
   return await themovieDB({
-    url: `tv/${tvId}/season/${season_number}/episode/${episode_number}/external_ids`,
+    url: `tv/${tvId}/season/${seasonNumber}/episode/${episodeNumber}/external_ids`,
   })
 }
 
