@@ -15,6 +15,13 @@ import getMoviesSearch from './getMoviesSearch'
 import getPeopleSearch from './getPeopleSearch'
 import uploadTMDBFile from './uploadFileTmdb'
 import getPersonCombinedCredits from './getPersonCombinedCredits'
+import getTV from './TV/getTV'
+import getTVSeason from './TV/getTVSeason'
+import getTVSeasonEpisode from './TV/getTVSeasonEpisode'
+import getTVExternalIds from './TV/getTVExternalIds'
+import getTVSeasonExternalIds from './TV/getTVSeasonExternalIds'
+import getTVSeasonEpisodeExternalIds from './TV/getTVSeasonEpisodeExternalIds'
+import getTVTrending from './TV/getTVTrending'
 
 export {
   getMovie,
@@ -33,5 +40,12 @@ export {
   getMoviesSearch,
   getPeopleSearch,
   uploadTMDBFile,
-  getPersonCombinedCredits
+  getPersonCombinedCredits,
+  getTV,
+  getTVSeason,
+  getTVSeasonEpisode,
+  getTVExternalIds,
+  getTVSeasonExternalIds,
+  getTVSeasonEpisodeExternalIds,
+  getTVTrending
 }

@@ -18,7 +18,7 @@ export const getTrending = async ({ language = MOVIE_LANGUAGE.EN }: { language?:
   const data = await themovieService.getTrending({
     language,
     timeWindow: TRENDING_TIME_WINDOW.WEEK,
-    mediaType: TRENDING_MEDIA_TYPE.ALL
+    mediaType: TRENDING_MEDIA_TYPE.MOVIE
   })
 
   const movieIds = data.results.map((movie) => movie.id);

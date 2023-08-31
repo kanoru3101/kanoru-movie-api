@@ -12,6 +12,10 @@ export enum MOVIE_STATUSES {
   CANCELED = 'Canceled',
 }
 
+export enum TV_STATUSES {
+  RETURNING_SERIES = 'Returning Series'
+}
+
 export enum WORKER_STATUS {
   CREATED= 'created',
   STARTED = 'started',
@@ -31,4 +35,9 @@ export enum SEARCH_FILTERS {
   ALL = 'all',
   MOVIES = 'movies',
   PEOPLE = 'people'
+}
+
+export enum TV_TYPES {
+  SCRIPTED = 'Scripted',
+  MINISERIES = 'Miniseries'
 }
